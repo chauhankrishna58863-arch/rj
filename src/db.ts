@@ -40,6 +40,56 @@ export function isDatabaseConnected(): boolean {
 }
 
 // ---------------------------------------------------------------------------
+// Session Persistence
+// ---------------------------------------------------------------------------
+export async function persistSessionToDb(token: string, userId: string, username: string, ip?: string, userAgent?: string): Promise<boolean> {
+  try {
+    const expiresAt = new Date(Date.now() + 30 * 24 * 3600 * 1000); // 30 days
+    await pool.query(
+      `INSERT INTO user_sessions (session_token, user_id, username, ip_address, user_agent, expires_at)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (session_token) DO UPDATE SET last_activity = NOW()`,
+      [token, userId, username, ip && !ip.includes(':') ? ip : null, userAgent || null, expiresAt]
+    );
+    return true;
+  } catch (err: any) {
+    console.warn('Could not persist session to Supabase:', err.message);
+    return false;
+  }
+}
+
+export async function deleteSessionFromDb(token: string): Promise<boolean> {
+  try {
+    await pool.query(`DELETE FROM user_sessions WHERE session_token = $1`, [token]);
+    return true;
+  } catch (err: any) {
+    console.warn('Could not delete session from Supabase:', err.message);
+    return false;
+  }
+}
+
+export async function loadSessionsFromDb(): Promise<Array<{ token: string; userId: string; username: string; ip?: string; userAgent?: string }>> {
+  try {
+    const res = await pool.query(
+      `SELECT session_token, user_id, username, ip_address, user_agent 
+       FROM user_sessions 
+       WHERE expires_at > NOW() AND is_active = TRUE`
+    );
+    return res.rows.map(r => ({
+      token: r.session_token,
+      userId: r.user_id,
+      username: r.username,
+      ip: r.ip_address,
+      userAgent: r.user_agent
+    }));
+  } catch (err: any) {
+    console.warn('Could not load sessions from Supabase:', err.message);
+    return [];
+  }
+}
+
+
+// ---------------------------------------------------------------------------
 // OTP Ledger Persistence
 // ---------------------------------------------------------------------------
 export async function recordOtpInLedger(params: {

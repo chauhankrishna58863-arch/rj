@@ -6,7 +6,10 @@ import {
   loadUsersFromDb,
   persistProjectToDb,
   persistFeedbackToDb,
-  persistThreatToDb
+  persistThreatToDb,
+  persistSessionToDb,
+  deleteSessionFromDb,
+  loadSessionsFromDb
 } from './db.js';
 
 export class MemoryStore {
@@ -46,6 +49,24 @@ export class MemoryStore {
         this.users.set(u.user_id, u);
       }
       console.log(`⚡ Supabase sync: ${dbUsers.length} user accounts loaded into store.`);
+
+      // Load active sessions from Supabase
+      const dbSessions = await loadSessionsFromDb();
+      for (const s of dbSessions) {
+        this.sessions.set(s.token, {
+          session_id: s.token,
+          user_id: s.userId,
+          username: s.username,
+          ip: s.ip || '127.0.0.1',
+          user_agent: s.userAgent || 'Unknown',
+          login_time: new Date().toISOString(),
+          last_active: new Date().toISOString(),
+          status: 'Active'
+        });
+      }
+      if (dbSessions.length > 0) {
+        console.log(`⚡ Supabase sync: ${dbSessions.length} active sessions restored into store.`);
+      }
     } catch (err: any) {
       console.warn('⚠️ Supabase store sync warning:', err.message);
     }
@@ -171,8 +192,8 @@ export class MemoryStore {
       }
     ];
 
-    // Default active user is the operative for zero-friction preview
-    this.activeSessionUser = demoUser;
+    // Default active user is only set in test environment for headless runner
+    this.activeSessionUser = process.env.NODE_ENV === 'test' ? demoUser : null;
   }
 
   // --- USER AUTHENTICATION ---
@@ -418,6 +439,35 @@ export class MemoryStore {
   }
 
   // --- SESSIONS ---
+  createSession(token: string, userId: string, ip?: string, userAgent?: string): SessionRecord {
+    const user = this.users.get(userId);
+    const session: SessionRecord = {
+      session_id: token,
+      user_id: userId,
+      username: user ? user.username : userId,
+      ip: ip || '127.0.0.1',
+      user_agent: userAgent || 'Unknown',
+      login_time: new Date().toISOString(),
+      last_active: new Date().toISOString(),
+      status: 'Active'
+    };
+    this.sessions.set(token, session);
+    persistSessionToDb(token, userId, session.username, ip, userAgent).catch(err => console.warn('Supabase persist session error:', err.message));
+    return session;
+  }
+
+  getUserBySessionToken(token: string): User | undefined {
+    const session = this.sessions.get(token);
+    if (!session || session.status !== 'Active') return undefined;
+    session.last_active = new Date().toISOString();
+    return this.users.get(session.user_id);
+  }
+
+  deleteSession(token: string): boolean {
+    deleteSessionFromDb(token).catch(err => console.warn('Supabase delete session error:', err.message));
+    return this.sessions.delete(token);
+  }
+
   getActiveSessionUser(): User | null {
     return this.activeSessionUser;
   }

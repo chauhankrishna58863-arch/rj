@@ -16,7 +16,7 @@ export const mailTransporter = nodemailer.createTransport({
   socketTimeout: 10000
 });
 
-export async function sendOtpEmail(toEmail: string, userName: string, gmailOtp: string, phoneOtp?: string): Promise<{ success: boolean; messageId?: string; error?: string }> {
+export async function sendOtpEmail(toEmail: string, userName: string, gmailOtp: string): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
     const htmlContent = `
       <div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0b0f19; color: #f8fafc; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
@@ -26,32 +26,21 @@ export async function sendOtpEmail(toEmail: string, userName: string, gmailOtp: 
         </div>
         
         <div style="padding: 30px 24px;">
-          <h2 style="margin-top: 0; font-size: 20px; color: #38bdf8;">🔐 Security Verification Code</h2>
+          <h2 style="margin-top: 0; font-size: 20px; color: #38bdf8;">🔐 Gmail Security Verification Code</h2>
           <p style="color: #94a3b8; font-size: 15px; line-height: 1.6;">
             Hello <strong style="color: #f1f5f9;">${userName || 'Operative'}</strong>,
           </p>
           <p style="color: #94a3b8; font-size: 15px; line-height: 1.6;">
-            We received a request to verify your account credentials on the Blackmagic AI Terminal. Use the security verification code(s) below to complete your authorization:
+            We received an authentication request for your Blackmagic AI Terminal account. Use the Gmail security verification code below to authorize your session:
           </p>
 
-          <div style="background: #131d31; border: 1px solid #1e293b; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
+          <div style="background: #131d31; border: 1px solid #1e293b; border-radius: 8px; padding: 24px; margin: 24px 0; text-align: center;">
             <div style="font-size: 12px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;">
               📧 Gmail Verification OTP
             </div>
-            <div style="font-family: 'Courier New', monospace; font-size: 36px; font-weight: 800; color: #ffffff; letter-spacing: 6px; margin: 5px 0;">
+            <div style="font-family: 'Courier New', monospace; font-size: 38px; font-weight: 800; color: #ffffff; letter-spacing: 6px; margin: 8px 0;">
               ${gmailOtp}
             </div>
-            ${phoneOtp ? `
-            <div style="border-top: 1px dashed #334155; margin: 16px 0; padding-top: 16px;">
-              <div style="font-size: 12px; font-weight: 700; color: #a855f7; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;">
-                📱 Mobile Phone SMS OTP Backup
-              </div>
-              <div style="font-family: 'Courier New', monospace; font-size: 32px; font-weight: 800; color: #c084fc; letter-spacing: 6px;">
-                ${phoneOtp}
-              </div>
-              <div style="font-size: 12px; color: #64748b; margin-top: 4px;">(Use this code in the Mobile Phone SMS field)</div>
-            </div>
-            ` : ''}
             <div style="font-size: 12px; color: #64748b; margin-top: 12px;">
               ⏱️ This code expires in <strong>10 minutes</strong>. Never share this code with anyone.
             </div>
@@ -71,8 +60,8 @@ export async function sendOtpEmail(toEmail: string, userName: string, gmailOtp: 
     const info = await mailTransporter.sendMail({
       from: `"Blackmagic AI Security" <${GMAIL_USER}>`,
       to: toEmail,
-      subject: `[${gmailOtp}] Your Blackmagic AI Security Verification Code`,
-      text: `Hello ${userName || 'Operative'},\n\nYour Gmail Verification Code is: ${gmailOtp}\n${phoneOtp ? `Your Mobile SMS Code is: ${phoneOtp}\n` : ''}\nThis code expires in 10 minutes.\n\nBlackmagic AI Neural Systems`,
+      subject: `[${gmailOtp}] Your Blackmagic AI Gmail Security OTP`,
+      text: `Hello ${userName || 'Operative'},\n\nYour Gmail Verification Code is: ${gmailOtp}\n\nThis code expires in 10 minutes.\n\nBlackmagic AI Neural Systems`,
       html: htmlContent
     });
 

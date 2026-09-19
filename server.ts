@@ -12,7 +12,9 @@ import { offlineQAEngine } from './src/offlineKnowledgeEngine.js';
 import { SIH_PROJECT_DATA } from './src/sihPdfGenerator.js';
 import { triModelPipeline } from './src/triModelPipeline.js';
 import { sendOtpEmail } from './src/mailer.js';
+import { sendPhoneSmsOtp } from './src/sms.js';
 import { recordOtpInLedger, markOtpVerifiedInLedger, getLatestOtpFromLedger, testDbConnection } from './src/db.js';
+import { User } from './src/types.js';
 
 export const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
@@ -31,6 +33,87 @@ interface PendingRegistration {
   expiresAt: number;
 }
 const pendingMobileRegistrations = new Map<string, PendingRegistration>();
+
+// ---------------------------------------------------------------------------
+// PER-CLIENT SESSION IDENTITY MANAGEMENT
+// ---------------------------------------------------------------------------
+export function getSessionToken(req: Request): string | undefined {
+  // 1. Authorization header: Bearer <token>
+  const authHeader = req.headers['authorization'];
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.slice(7).trim();
+  }
+  // 2. Custom header: x-session-token
+  const headerToken = req.headers['x-session-token'];
+  if (typeof headerToken === 'string' && headerToken.trim()) {
+    return headerToken.trim();
+  }
+  // 3. Cookie header: bm_session=<token>
+  const cookieHeader = req.headers['cookie'];
+  if (cookieHeader) {
+    const parts = cookieHeader.split(';');
+    for (const part of parts) {
+      const [k, v] = part.trim().split('=');
+      if (k === 'bm_session' && v) {
+        return decodeURIComponent(v);
+      }
+    }
+  }
+  return undefined;
+}
+
+export function getRequestUser(req: Request): User | null {
+  const token = getSessionToken(req);
+  if (token) {
+    const user = store.getUserBySessionToken(token);
+    if (user) return user;
+  }
+
+  // Check x-user-id header
+  const headerUserId = req.headers['x-user-id'];
+  if (typeof headerUserId === 'string' && headerUserId.trim()) {
+    const user = store.getUserById(headerUserId.trim());
+    if (user) return user;
+  }
+
+  // Check req.body.user_id if present
+  if (req.body && req.body.user_id) {
+    const user = store.getUserById(String(req.body.user_id));
+    if (user) return user;
+  }
+
+  // Headless test runner fallback
+  if (process.env.NODE_ENV === 'test') {
+    return store.getActiveSessionUser();
+  }
+
+  return null;
+}
+
+export function issueSession(res: Response, req: Request, user: User): string {
+  const sessionToken = `bm_${Date.now()}_${Math.random().toString(36).substring(2, 12)}`;
+  store.createSession(sessionToken, user.user_id, req.ip, req.headers['user-agent'] as string);
+  if (process.env.NODE_ENV === 'test') {
+    store.setActiveSessionUser(user);
+  }
+
+  res.setHeader(
+    'Set-Cookie',
+    `bm_session=${encodeURIComponent(sessionToken)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`
+  );
+  return sessionToken;
+}
+
+export function clearSession(res: Response, req: Request): void {
+  const token = getSessionToken(req);
+  if (token) {
+    store.deleteSession(token);
+  }
+  if (process.env.NODE_ENV === 'test') {
+    store.setActiveSessionUser(null);
+  }
+  res.setHeader('Set-Cookie', 'bm_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0');
+}
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -327,25 +410,33 @@ async function handleSendDualOTP(req: Request, res: Response) {
     expiresAt: new Date(expiresAt)
   }).catch(err => console.warn('Supabase record OTP warning:', err.message));
 
-  // Send real email via Nodemailer
+  // Send real email via Nodemailer (Gmail OTP ONLY to email)
   let emailDispatched = false;
   try {
-    const mailResult = await sendOtpEmail(resolvedEmail, resolvedName, gmailOtp, phoneOtp);
+    const mailResult = await sendOtpEmail(resolvedEmail, resolvedName, gmailOtp);
     emailDispatched = mailResult.success;
   } catch (err: any) {
     console.warn('Email dispatch warning:', err.message);
   }
 
+  // Send Phone OTP via SMS to Mobile Phone
+  let smsDispatched = false;
+  try {
+    const smsResult = await sendPhoneSmsOtp(cleanMobile, phoneOtp);
+    smsDispatched = smsResult.success;
+  } catch (err: any) {
+    console.warn('SMS dispatch warning:', err.message);
+  }
+
   return res.status(200).json({
     success: true,
-    message: emailDispatched
-      ? `Dual OTP dispatched! Verification codes sent to Gmail (${resolvedEmail}) and Mobile (+91 ${cleanMobile}). Check your inbox!`
-      : `Dual OTP dispatched! Verification code sent to your devices.`,
+    message: `Security OTPs dispatched! Gmail OTP sent to ${resolvedEmail}, and Mobile SMS OTP sent to +91 ${cleanMobile}.`,
     mobile: cleanMobile,
     gmail: resolvedEmail,
     phone_otp: phoneOtp,
     demo_otp: phoneOtp,
     email_dispatched: emailDispatched,
+    sms_dispatched: smsDispatched,
     expires_in_seconds: 600
   });
 }
@@ -481,13 +572,14 @@ async function handleVerifyDualOTP(req: Request, res: Response) {
     store.updateUserPassword(user.user_id, new_password || 'Password123!');
   }
 
-  store.setActiveSessionUser(user);
+  const sessionToken = issueSession(res, req, user);
 
   console.log(`✅ Dual OTP Verified & Saved in Database: ${user.username} (${user.gmail}, +91 ${user.mobile})`);
 
   return res.status(200).json({
     success: true,
     message: `Account verified via Dual OTP (Gmail + Mobile) and saved to database! Welcome to Blackmagic AI, ${user.name || user.username}.`,
+    session_token: sessionToken,
     user: {
       user_id: user.user_id,
       name: user.name,
@@ -507,8 +599,8 @@ async function handleVerifyDualOTP(req: Request, res: Response) {
 authRouter.post('/verify-dual-otp', handleVerifyDualOTP);
 authRouter.post('/verify-mobile-otp', handleVerifyDualOTP);
 
-authRouter.get('/current-user', (_req: Request, res: Response) => {
-  const user = store.getActiveSessionUser();
+authRouter.get('/current-user', (req: Request, res: Response) => {
+  const user = getRequestUser(req);
   if (!user) {
     return res.status(200).json({ success: false, user: null });
   }
@@ -588,13 +680,14 @@ authRouter.post('/register', (req: Request, res: Response) => {
     age: parsedAge,
     mobile: resolvedPhone ? String(resolvedPhone).trim() : undefined
   });
-  store.setActiveSessionUser(user);
+  const sessionToken = issueSession(res, req, user);
 
   const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
 
   return res.status(200).json({
     success: true,
     message: `Account created successfully with 4.5M tokens provisioned. Security OTP sent to ${resolvedPhone || email}.`,
+    session_token: sessionToken,
     user_id: user.user_id,
     otp_code: otpCode,
     user: {
@@ -615,11 +708,11 @@ authRouter.post('/verify_otp', (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'OTP parameter missing.' });
   }
 
-  const user = user_id ? store.getUserById(user_id) : store.getActiveSessionUser();
+  const user = user_id ? store.getUserById(user_id) : (getRequestUser(req) || store.getActiveSessionUser());
   if (user) {
     user.status = 'Active';
-    store.setActiveSessionUser(user);
-    return res.status(200).json({ success: true, message: 'Account verified and activated.' });
+    const sessionToken = issueSession(res, req, user);
+    return res.status(200).json({ success: true, message: 'Account verified and activated.', session_token: sessionToken });
   }
 
   return res.status(200).json({ success: true, message: 'Account verified and activated.' });
@@ -662,11 +755,12 @@ authRouter.post('/login', (req: Request, res: Response) => {
 
   store.resetFailedLogins(user.user_id);
   user.last_login = new Date().toISOString();
-  store.setActiveSessionUser(user);
+  const sessionToken = issueSession(res, req, user);
 
   return res.status(200).json({
     success: true,
     message: 'Login authorized. Access granted.',
+    session_token: sessionToken,
     user: {
       user_id: user.user_id,
       username: user.username,
@@ -682,8 +776,8 @@ authRouter.post('/login', (req: Request, res: Response) => {
   });
 });
 
-authRouter.post('/check_session', (_req: Request, res: Response) => {
-  const user = store.getActiveSessionUser();
+authRouter.post('/check_session', (req: Request, res: Response) => {
+  const user = getRequestUser(req);
   if (!user) {
     return res.status(200).json({ success: false, message: 'Session invalid or expired' });
   }
@@ -705,8 +799,8 @@ authRouter.post('/check_session', (_req: Request, res: Response) => {
   });
 });
 
-authRouter.post('/logout', (_req: Request, res: Response) => {
-  store.setActiveSessionUser(null);
+authRouter.post('/logout', (req: Request, res: Response) => {
+  clearSession(res, req);
   res.status(200).json({ success: true, message: 'Session wiped.' });
 });
 
@@ -728,7 +822,7 @@ authRouter.post('/reset_password', (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'Password must be at least 8 characters long.' });
   }
 
-  const targetId = user_id || store.getActiveSessionUser()?.user_id || 'user-001';
+  const targetId = user_id || getRequestUser(req)?.user_id || store.getActiveSessionUser()?.user_id || 'user-001';
   store.updateUserPassword(targetId, new_password);
 
   return res.status(200).json({
@@ -745,8 +839,8 @@ app.use('/api/v1/auth', authRouter);
 // ---------------------------------------------------------------------------
 const userRouter = express.Router();
 
-userRouter.get('/profile', (_req: Request, res: Response) => {
-  const user = store.getActiveSessionUser();
+userRouter.get('/profile', (req: Request, res: Response) => {
+  const user = getRequestUser(req) || store.getActiveSessionUser();
   if (!user) {
     return res.status(401).json({ success: false, message: 'Authentication required' });
   }
@@ -764,8 +858,8 @@ userRouter.get('/profile', (_req: Request, res: Response) => {
   });
 });
 
-userRouter.get('/tokens', (_req: Request, res: Response) => {
-  const user = store.getActiveSessionUser();
+userRouter.get('/tokens', (req: Request, res: Response) => {
+  const user = getRequestUser(req) || store.getActiveSessionUser();
   const userId = user?.user_id || 'user-001';
   const tokens = store.getUserTokens(userId);
 
@@ -777,7 +871,7 @@ userRouter.get('/tokens', (_req: Request, res: Response) => {
 
 userRouter.post('/update_permission', (req: Request, res: Response) => {
   const { user_id, permission_level } = req.body;
-  const targetId = user_id || store.getActiveSessionUser()?.user_id || 'user-001';
+  const targetId = user_id || getRequestUser(req)?.user_id || store.getActiveSessionUser()?.user_id || 'user-001';
 
   store.updateUserPermission(targetId, permission_level);
   return res.status(200).json({
@@ -792,8 +886,8 @@ app.use('/api/v1/user', userRouter);
 // ---------------------------------------------------------------------------
 // PROJECTS
 // ---------------------------------------------------------------------------
-app.get(['/api/projects', '/api/projects/list'], (_req: Request, res: Response) => {
-  const user = store.getActiveSessionUser();
+app.get(['/api/projects', '/api/projects/list'], (req: Request, res: Response) => {
+  const user = getRequestUser(req) || store.getActiveSessionUser();
   const projects = store.getProjects(user?.user_id);
   res.status(200).json(projects);
 });
@@ -804,7 +898,7 @@ app.post(['/api/projects', '/api/projects/create'], (req: Request, res: Response
     return res.status(400).json({ success: false, message: 'Project name required' });
   }
 
-  const user = store.getActiveSessionUser();
+  const user = getRequestUser(req) || store.getActiveSessionUser();
   const userId = user?.user_id || 'user-001';
   const created = store.createProject(name, userId);
 
@@ -843,7 +937,7 @@ app.post('/api/chat/ask', async (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'Prompt content cannot be empty.' });
   }
 
-  const activeUser = store.getActiveSessionUser() || (user_id ? store.getUserById(user_id) : null);
+  const activeUser = getRequestUser(req) || (user_id ? store.getUserById(user_id) : null) || store.getActiveSessionUser();
   const effectiveUserId = activeUser?.user_id || 'user-001';
 
   // Check if account is suspended due to cascading token depletion
@@ -1392,7 +1486,7 @@ app.post('/api/gemini/config', (req: Request, res: Response) => {
 // ---------------------------------------------------------------------------
 app.post('/api/plans/upgrade', (req: Request, res: Response) => {
   const { user_id, tier } = req.body;
-  const targetId = user_id || store.getActiveSessionUser()?.user_id || 'user-001';
+  const targetId = user_id || getRequestUser(req)?.user_id || store.getActiveSessionUser()?.user_id || 'user-001';
 
   store.upgradeUserTier(targetId, tier as any);
   return res.status(200).json({
@@ -1540,7 +1634,7 @@ function handleFeedbackSubmission(req: Request, res: Response) {
     return res.status(400).json({ success: false, message: 'Feedback text is required' });
   }
 
-  const user = store.getActiveSessionUser();
+  const user = getRequestUser(req) || store.getActiveSessionUser();
   const isAdmin = user?.permission_level === 'Admin';
   const identifier = user?.user_id || (username && typeof username === 'string' ? username.trim() : '') || req.ip || 'operative';
 

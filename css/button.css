@@ -1,0 +1,347 @@
+/* Button Component Styles - Blackmagic AI Design System */
+
+/* Base Button Styles - Consistent with design tokens */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  gap: var(--space-2);
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-property) var(--transition-duration) var(--transition-timing-function);
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Button Variants */
+.button-primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+.button-primary:hover {
+  background-color: var(--color-primary-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.button-primary:active {
+  background-color: var(--color-primary-darker);
+  transform: translateY(0);
+}
+
+.button-primary:disabled,
+.button-primary[disabled] {
+  background-color: var(--color-muted);
+  color: var(--color-muted-foreground);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Secondary Button */
+.button-secondary {
+  background-color: transparent;
+  color: var(--color-foreground);
+  border: 1px solid var(--color-border);
+}
+
+.button-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--color-white);
+}
+
+.button-secondary:active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.button-secondary:disabled,
+.button-secondary[disabled] {
+  color: var(--color-muted);
+  border-color: var(--color-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Ghost Button */
+.button-ghost {
+  background-color: transparent;
+  color: var(--color-muted);
+  border: none;
+}
+
+.button-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--color-foreground);
+}
+
+.button-ghost:active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.button-ghost:disabled,
+.button-ghost[disabled] {
+  color: var(--color-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Icon Button */
+.button-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: var(--button-border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-icon:hover,
+.button-icon:active {
+  padding: 0;
+}
+
+/* Size Variations */
+.button-sm {
+  font-size: var(--font-size-sm);
+  padding: calc(var(--space-3) * 0.75) calc(var(--space-4) * 0.75);
+}
+
+.button-lg {
+  font-size: var(--font-size-lg);
+  padding: calc(var(--space-3) * 1.25) calc(var(--space-4) * 1.25);
+}
+
+/* Button Groups - For aligning multiple buttons */
+.button-group {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.button-group .button {
+  border-radius: var(--radius-md);
+}
+
+/* First button in group - rounded left */
+.button-group .button:first-child {
+  border-top-left-radius: var(--radius-md);
+  border-bottom-left-radius: var(--radius-md);
+}
+
+/* Last button in group - rounded right */
+.button-group .button:last-child {
+  border-top-right-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+}
+
+/* Middle buttons in group - no radius */
+.button-group .button:not(:first-child):not(:last-child) {
+  border-radius: 0;
+  border-left: 1px solid var(--color-border);
+}
+
+/* Button with loading state */
+.button-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.button-loading::after {
+  content: "";
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  left: calc(50% - 0.5rem);
+  top: calc(50% - 0.5rem);
+}
+
+/* Hide text when loading */
+.button-loading .button-text {
+  visibility: hidden;
+  position: absolute;
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Focus Styles */
+.button:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Disable button animations for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+
+  .button-loading::after {
+    animation: none;
+  }
+}
+
+/* Specialized Buttons for Blackmagic AI */
+
+/* Primary Action Button - for main CTA */
+.button-primary-action {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.button-primary-action::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(30deg);
+  transition: transform 0.5s ease;
+}
+
+.button-primary-action:hover::before {
+  transform: rotate(30deg) translate(20%, -20%);
+}
+
+.button-primary-action:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.button-primary-action:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md);
+}
+
+/* Secondary Action Button */
+.button-secondary-action {
+  background-color: transparent;
+  color: var(--color-white);
+  border: 1px solid var(--color-border);
+  padding: var(--space-2-5) var(--space-4);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.button-secondary-action:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--color-white);
+}
+
+.button-secondary-action:active {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Danger Button - for destructive actions */
+.button-danger {
+  background-color: var(--color-error);
+  color: var(--color-white);
+  border: none;
+  padding: var(--space-2-5) var(--space-4);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.button-danger:hover {
+  background-color: #dc2626; /* Darker red */
+}
+
+.button-danger:active {
+  background-color: #b91c1c; /* Even darker red */
+}
+
+/* Ghost Button - minimal style */
+.button-ghost-action {
+  background-color: transparent;
+  color: var(--color-muted);
+  border: none;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.button-ghost-action:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--color-white);
+}
+
+.button-ghost-action:active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Button Groups for Action Bars */
+.action-button-group {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .button {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-sm);
+  }
+
+  .button-icon-only {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .button-group {
+    gap: var(--space-1);
+  }
+}
+
+/* Glassmorphism Button Variant */
+.button-glass {
+  background: var(--color-background-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: var(--color-foreground);
+}
+
+.button-glass:hover {
+  background: var(--color-background-glass);
+  backdrop-filter: blur(15px);
+  border-color: var(--border-neon);
+  box-shadow: var(--neon-glow);
+}
+
+.button-glass:active {
+  transform: scale(0.98);
+}

@@ -1,0 +1,298 @@
+:root {
+  /* Color Primitives */
+  --color-blue-600: #6366f1;
+  --color-cyan-400: #06b6d4;
+  --color-emerald-500: #10b981;
+  --color-amber-500: #f59e0b;
+  --color-red-500: #ef4444;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+  --color-gray-950: #020617;
+  --color-black: #07080a;
+  --color-white: #ffffff;
+
+  /* Radius Primitives */
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Space Primitives */
+  --space-px: 1px;
+  --space-0: 0px;
+  --space-0-5: 2px;
+  --space-1: 4px;
+  --space-1-5: 6px;
+  --space-2: 8px;
+  --space-2-5: 10px;
+  --space-3: 12px;
+  --space-3-5: 14px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-11: 44px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-28: 112px;
+  --space-32: 128px;
+  --space-36: 144px;
+  --space-40: 160px;
+  --space-44: 176px;
+  --space-48: 192px;
+  --space-52: 208px;
+  --space-56: 224px;
+  --space-60: 240px;
+  --space-64: 256px;
+  --space-72: 288px;
+  --space-80: 320px;
+  --space-96: 384px;
+
+  /* Font Size Primitives */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-7xl: 4.5rem;
+  --font-size-8xl: 6rem;
+  --font-size-9xl: 8rem;
+
+  /* Font Weight Primitives */
+  --font-weight-hairline: 100;
+  --font-weight-thin: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* Line Height Primitives */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Shadow Primitives */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-none: none;
+
+  /* Semantic Tokens */
+  --color-primary: var(--color-blue-600);
+  --color-primary-foreground: var(--color-white);
+  --color-primary-dark: var(--color-blue-700);
+  --color-primary-darker: var(--color-blue-800);
+  --color-secondary: var(--color-cyan-400);
+  --color-secondary-foreground: var(--color-white);
+  --color-secondary-dark: var(--color-cyan-500);
+  --color-secondary-darker: var(--color-cyan-600);
+  --color-accent: var(--color-emerald-500);
+  --color-accent-foreground: var(--color-white);
+  --color-accent-dark: var(--color-emerald-600);
+  --color-accent-darker: var(--color-emerald-700);
+  --color-background: var(--color-black);
+  --color-background-glass: rgba(17,18,23,0.75);
+  --color-foreground: var(--color-gray-100);
+  --color-muted: var(--color-gray-600);
+  --color-muted-foreground: var(--color-gray-300);
+  --color-popover: var(--color-black);
+  --color-popover-foreground: var(--color-gray-100);
+  --color-card: var(--color-black);
+  --color-card-foreground: var(--color-gray-100);
+  --color-border: var(--color-gray-700);
+  --color-input: var(--color-gray-700);
+  --color-input-foreground: var(--color-gray-100);
+  --color-ring: var(--color-blue-600);
+  --color-success: var(--color-emerald-500);
+  --color-warning: var(--color-amber-500);
+  --color-error: var(--color-red-500);
+  --color-info: var(--color-cyan-400);
+
+  /* Radius Semantics */
+  --radius-none: var(--radius-none);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-full: var(--radius-full);
+
+  /* Space Semantics */
+  --space-px: var(--space-px);
+  --space-0: var(--space-0);
+  --space-0-5: var(--space-0-5);
+  --space-1: var(--space-1);
+  --space-1-5: var(--space-1-5);
+  --space-2: var(--space-2);
+  --space-2-5: var(--space-2-5);
+  --space-3: var(--space-3);
+  --space-3-5: var(--space-3-5);
+  --space-4: var(--space-4);
+  --space-5: var(--space-5);
+  --space-6: var(--space-6);
+  --space-7: var(--space-7);
+  --space-8: var(--space-8);
+  --space-9: var(--space-9);
+  --space-10: var(--space-10);
+  --space-11: var(--space-11);
+  --space-12: var(--space-12);
+  --space-14: var(--space-14);
+  --space-16: var(--space-16);
+  --space-20: var(--space-20);
+  --space-24: var(--space-24);
+  --space-28: var(--space-28);
+  --space-32: var(--space-32);
+  --space-36: var(--space-36);
+  --space-40: var(--space-40);
+  --space-44: var(--space-44);
+  --space-48: var(--space-48);
+  --space-52: var(--space-52);
+  --space-56: var(--space-56);
+  --space-60: var(--space-60);
+  --space-64: var(--space-64);
+  --space-72: var(--space-72);
+  --space-80: var(--space-80);
+  --space-96: var(--space-96);
+
+  /* Font Size Semantics */
+  --font-size-xs: var(--font-size-xs);
+  --font-size-sm: var(--font-size-sm);
+  --font-size-base: var(--font-size-base);
+  --font-size-lg: var(--font-size-lg);
+  --font-size-xl: var(--font-size-xl);
+  --font-size-2xl: var(--font-size-2xl);
+  --font-size-3xl: var(--font-size-3xl);
+  --font-size-4xl: var(--font-size-4xl);
+  --font-size-5xl: var(--font-size-5xl);
+  --font-size-6xl: var(--font-size-6xl);
+  --font-size-7xl: var(--font-size-7xl);
+  --font-size-8xl: var(--font-size-8xl);
+  --font-size-9xl: var(--font-size-9xl);
+
+  /* Font Weight Semantics */
+  --font-weight-hairline: var(--font-weight-hairline);
+  --font-weight-thin: var(--font-weight-thin);
+  --font-weight-light: var(--font-weight-light);
+  --font-weight-normal: var(--font-weight-normal);
+  --font-weight-medium: var(--font-weight-medium);
+  --font-weight-semibold: var(--font-weight-semibold);
+  --font-weight-bold: var(--font-weight-bold);
+  --font-weight-extrabold: var(--font-weight-extrabold);
+  --font-weight-black: var(--font-weight-black);
+
+  /* Line Height Semantics */
+  --line-height-none: var(--line-height-none);
+  --line-height-tight: var(--line-height-tight);
+  --line-height-snug: var(--line-height-snug);
+  --line-height-normal: var(--line-height-normal);
+  --line-height-relaxed: var(--line-height-relaxed);
+  --line-height-loose: var(--line-height-loose);
+
+  /* Shadow Semantics */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+  --shadow-inner: var(--shadow-inner);
+  --shadow-none: var(--shadow-none);
+
+  /* Component Tokens - Button */
+  --button-background: var(--color-primary);
+  --button-foreground: var(--color-primary-foreground);
+  --button-border: none;
+  --button-shadow: var(--shadow-sm);
+  --button-hover-background: var(--color-primary-dark);
+  --button-hover-foreground: var(--color-primary-foreground);
+  --button-hover-border: none;
+  --button-hover-shadow: var(--shadow-md);
+  --button-active-background: var(--color-primary-darker);
+  --button-active-foreground: var(--color-primary-foreground);
+  --button-active-border: none;
+  --button-active-shadow: none;
+  --button-disabled-background: var(--color-muted);
+  --button-disabled-foreground: var(--color-muted-foreground);
+  --button-disabled-border: var(--color-muted);
+  --button-disabled-shadow: none;
+  --button-padding-x: var(--space-4);
+  --button-padding-y: var(--space-3);
+  --button-font-size: var(--font-size-base);
+  --button-font-weight: var(--font-weight-semibold);
+  --button-border-radius: var(--radius-md);
+  --button-transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  --button-transition-duration: 200ms;
+  --button-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Component Tokens - Input */
+  --input-background: var(--color-background);
+  --input-foreground: var(--color-foreground);
+  --input-border: var(--color-input);
+  --input-ring: var(--color-ring);
+  --input-background-hover: var(--color-background);
+  --input-foreground-hover: var(--color-foreground);
+  --input-border-hover: var(--color-input);
+  --input-ring-hover: var(--color-ring);
+  --input-background-focus: var(--color-background);
+  --input-foreground-focus: var(--color-foreground);
+  --input-border-focus: var(--color-input);
+  --input-ring-focus: var(--color-ring);
+  --input-background-disabled: var(--color-muted);
+  --input-foreground-disabled: var(--color-muted-foreground);
+  --input-border-disabled: var(--color-muted);
+  --input-ring-disabled: var(--color-muted);
+  --input-padding-x: var(--space-3);
+  --input-padding-y: var(--space-2);
+  --input-font-size: var(--font-size-base);
+  --input-font-weight: var(--font-weight-normal);
+  --input-border-radius: var(--radius-md);
+
+  /* Component Tokens - Card */
+  --card-background: var(--color-background-glass);
+  --card-foreground: var(--color-foreground);
+  --card-border: var(--color-border);
+  --card-shadow: var(--shadow-md);
+  --card-padding: var(--space-6);
+  --card-border-radius: var(--radius-lg);
+
+  /* Component Tokens - Sidebar */
+  --sidebar-background: var(--color-background-glass);
+  --sidebar-foreground: var(--color-foreground);
+  --sidebar-border: var(--color-border);
+  --sidebar-shadow: var(--shadow-lg);
+  --sidebar-width-collapsed: 40px;
+  --sidebar-width-expanded: 280px;
+  --sidebar-transition-width: 300ms;
+  --sidebar-transition-timing-function: ease-out-cubic;
+  --sidebar-padding: var(--space-4);
+  --sidebar-gap: var(--space-3);
+  --sidebar-border-radius: var(--radius-lg);
+}

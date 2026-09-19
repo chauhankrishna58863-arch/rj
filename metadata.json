@@ -1,0 +1,11 @@
+{
+  "name": "Blackmagic AI",
+  "description": "Multi-model AI workstation with dual executable panels, dynamic prompt command bar, live voice mode, and offline Q&A knowledge base.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

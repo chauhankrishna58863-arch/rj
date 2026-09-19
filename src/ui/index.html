@@ -1,0 +1,5308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blackmagic AI</title>
+  <meta name="description" content="Modern 3D multimodal AI workstation for SIH Junior 2026 with dual executable panels (client.exe and admin.exe), live voice mode, user registration with mobile OTP, and a 10,000,000+ offline direct and indirect Q&A knowledge base.">
+  <meta property="og:title" content="Blackmagic AI">
+  <meta property="og:description" content="Modern 3D multimodal AI workstation for SIH Junior 2026 with dual executable panels (client.exe and admin.exe), live voice mode, user registration with mobile OTP, and a 10,000,000+ offline direct and indirect Q&A knowledge base.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-base: #080c16;
+      --bg-sidebar: #0d121f;
+      --bg-surface: #111728;
+      --bg-surface-hover: #172036;
+      --bg-card: rgba(17, 23, 40, 0.85);
+      --bg-bubble-ai: #131a2e;
+      --bg-bubble-user: #1e293b;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #6366f1;
+      --accent-primary: #6366f1;
+      --accent-primary-hover: #4f46e5;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --accent-amber: #f59e0b;
+      --text-main: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.35);
+      --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.25);
+      --font-scale-base: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      font-size: var(--font-scale-base);
+      background-image: 
+        radial-gradient(circle at 50% -20%, rgba(99, 102, 241, 0.15), transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 36px 36px, 36px 36px;
+    }
+
+    /* TOP HEADER */
+    .top-header {
+      height: 58px;
+      background: rgba(13, 18, 31, 0.88);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+      font-size: 16px;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* EXECUTABLE DUAL-PANEL SWITCHER */
+    .app-exec-switcher {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 4px;
+    }
+
+    .exec-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .exec-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .exec-btn.active {
+      background: var(--accent-primary);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .permission-badge-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: #22d3ee;
+    }
+
+    .permission-badge-chip.full-access {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #f87171;
+    }
+
+    .user-profile-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 4px 12px 4px 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .user-profile-chip:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-primary);
+    }
+
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .user-name-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* APP WRAPPER */
+    .app-viewport {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* SCREEN 1: FULL-SCREEN APPLICATION AUTHENTICATION GATEWAY */
+    .screen-view {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .screen-view.active {
+      display: flex;
+    }
+
+    /* FULL-SCREEN LOGIN LOCKOUT (COVERS ENTIRE APPLICATION WINDOW) */
+    #login-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999999;
+      background: radial-gradient(circle at 50% 35%, #0f172a 0%, #080c18 65%, #020409 100%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    #login-screen.active {
+      display: flex;
+    }
+
+    .auth-card-box {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(17, 23, 40, 0.96);
+      border: 1px solid rgba(129, 140, 248, 0.25);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 35px rgba(99, 102, 241, 0.25);
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: modalScaleIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    @keyframes modalScaleIn {
+      from { opacity: 0; transform: scale(0.94) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .auth-header-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .auth-header-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .auth-form-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .auth-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .auth-field-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .auth-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .auth-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-auth-action {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-auth-action:hover {
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-auth-link {
+      background: transparent;
+      border: none;
+      color: #818cf8;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: color 0.15s ease;
+      padding: 4px;
+    }
+
+    .btn-auth-link:hover {
+      color: #a5b4fc;
+      text-decoration: underline;
+    }
+
+    /* SCREEN 2: CHAT WORKSPACE */
+    #chat-screen {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* SIDEBAR (Collapses to 40px, expands to 280px on hover) */
+    .collapsible-sidebar {
+      width: 52px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 8px;
+      gap: 12px;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 40;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .collapsible-sidebar:hover {
+      width: 280px;
+      align-items: stretch;
+      padding: 16px 14px;
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar-brand-mini {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 6px;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+      font-weight: 700;
+      font-size: 13px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .sidebar-brand-mini .sidebar-label {
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+      transition: opacity 0.2s ease, width 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .collapsible-sidebar:hover .sidebar-brand-mini .sidebar-label {
+      opacity: 1;
+      width: auto;
+    }
+
+    .sidebar-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .sidebar-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: var(--border-subtle);
+    }
+
+    .sidebar-btn .sidebar-icon {
+      font-size: 16px;
+      min-width: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .sidebar-btn .sidebar-label {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .collapsible-sidebar:hover .sidebar-btn .sidebar-label,
+    .collapsible-sidebar.pinned .sidebar-btn .sidebar-label {
+      opacity: 1;
+    }
+
+    /* PINNED / EXPANDED SIDEBAR STATE */
+    .collapsible-sidebar.pinned {
+      width: 280px;
+      align-items: stretch;
+      padding: 16px 14px;
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .collapsible-sidebar.pinned .sidebar-brand-mini .sidebar-label {
+      opacity: 1;
+      width: auto;
+    }
+
+    .sidebar-pin-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 4px;
+      border-radius: 4px;
+      display: none;
+      margin-left: auto;
+      transition: all 0.2s;
+    }
+
+    .collapsible-sidebar:hover .sidebar-pin-btn,
+    .collapsible-sidebar.pinned .sidebar-pin-btn {
+      display: inline-flex;
+    }
+
+    .sidebar-pin-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-active-project-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-size: 12px;
+      color: #38bdf8;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-top: auto;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-active-project-pill:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+    }
+
+    .sidebar-active-project-pill .sidebar-label {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .collapsible-sidebar:hover .sidebar-active-project-pill .sidebar-label,
+    .collapsible-sidebar.pinned .sidebar-active-project-pill .sidebar-label {
+      opacity: 1;
+    }
+
+    /* SLIDE-OUT DRAWERS (CHAT HISTORY & PROJECTS) */
+    .slide-drawer-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      align-items: stretch;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .slide-drawer-backdrop.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .slide-drawer-panel {
+      width: 380px;
+      max-width: 90vw;
+      background: #0d1322;
+      border-right: 1px solid var(--border-subtle);
+      box-shadow: 10px 0 35px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 20px;
+      height: 100%;
+      transform: translateX(-100%);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide-drawer-backdrop.active .slide-drawer-panel {
+      transform: translateX(0);
+    }
+
+    .slide-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 16px;
+    }
+
+    .drawer-title-group h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .drawer-title-group p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .drawer-close-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .drawer-close-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .drawer-actions-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .btn-new-session {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-new-session:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+    }
+
+    .drawer-search-input, .drawer-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+
+    .drawer-search-input:focus, .drawer-input:focus {
+      border-color: var(--accent-primary);
+    }
+
+    .drawer-items-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+
+    .session-item-card, .project-item-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+    }
+
+    .session-item-card:hover, .project-item-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .session-item-card.active, .project-item-card.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--accent-primary);
+    }
+
+    .session-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .session-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+
+    .session-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .session-delete-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 4px;
+      border-radius: 4px;
+      opacity: 0.6;
+      transition: all 0.2s;
+    }
+
+    .session-delete-btn:hover {
+      opacity: 1;
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .active-project-card {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(99, 102, 241, 0.12));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .new-project-inline-form {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .btn-create-project-mini {
+      background: var(--accent-primary);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-create-project-mini:hover {
+      background: var(--accent-primary-hover);
+    }
+
+    /* LIVE VOICE HUD OVERLAY */
+    .live-voice-hud {
+      position: absolute;
+      bottom: 84px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.94);
+      border: 1px solid rgba(99, 102, 241, 0.5);
+      border-radius: 30px;
+      padding: 8px 20px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(99, 102, 241, 0.3);
+      z-index: 45;
+      backdrop-filter: blur(12px);
+      max-width: 90%;
+    }
+
+    .live-voice-hud.active {
+      display: flex;
+    }
+
+    .live-voice-hud .sound-bars {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 16px;
+    }
+
+    .live-voice-hud .sound-bars span {
+      width: 3px;
+      height: 100%;
+      background: #818cf8;
+      border-radius: 3px;
+      animation: soundWave 0.9s infinite ease-in-out alternate;
+    }
+
+    .live-voice-hud .sound-bars span:nth-child(2) { animation-delay: 0.2s; height: 70%; background: #38bdf8; }
+    .live-voice-hud .sound-bars span:nth-child(3) { animation-delay: 0.4s; height: 40%; background: #a855f7; }
+
+    @keyframes soundWave {
+      0% { height: 20%; }
+      100% { height: 100%; }
+    }
+
+    .live-voice-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 420px;
+    }
+
+    .btn-voice-cancel {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    .sidebar-footer-spacer {
+      margin-top: auto;
+    }
+
+    /* MAIN CHAT AREA */
+    .chat-workspace-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    /* MODEL SELECTOR ROW */
+    .model-selector-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      background: rgba(13, 18, 31, 0.5);
+      border-bottom: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .model-buttons-group {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 4px;
+    }
+
+    .model-selector-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .model-selector-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .model-selector-btn.active {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-dpdp-badge {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-dpdp-badge:hover {
+      background: rgba(16, 185, 129, 0.2);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+    }
+
+    /* QUICK TOOLS PROMPT CHIPS ROW */
+    .quick-tools-bar {
+      display: flex;
+      align-items: center;
+      padding: 8px 24px;
+      gap: 8px;
+      overflow-x: auto;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .quick-tools-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .quick-chip-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .quick-chip-btn:hover {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--accent-primary);
+      color: #818cf8;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+    }
+
+    .quick-chip-btn.cyber-test {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .quick-chip-btn.cyber-test:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+    }
+
+    /* CHAT STREAM CONTAINER */
+    .chat-stream-viewport {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .chat-welcome-banner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      margin: auto;
+      max-width: 680px;
+    }
+
+    #three-core-canvas {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 25px rgba(99, 102, 241, 0.35));
+    }
+
+    .welcome-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 40%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .welcome-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 580px;
+    }
+
+    /* MESSAGE BUBBLES */
+    .chat-bubble-row {
+      display: flex;
+      gap: 14px;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .chat-bubble-row.user {
+      flex-direction: row-reverse;
+    }
+
+    .msg-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .chat-bubble-row.user .msg-avatar {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+    }
+
+    .chat-bubble-row.ai .msg-avatar {
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      color: #fff;
+    }
+
+    .msg-content-card {
+      background: var(--bg-bubble-ai);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      color: var(--text-main);
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 80%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .chat-bubble-row.user .msg-content-card {
+      background: var(--bg-bubble-user);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .msg-content-card pre {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      color: #38bdf8;
+    }
+
+    /* INPUT ROW CONTAINER */
+    .chat-input-bar-container {
+      padding: 14px 24px 20px;
+      background: rgba(13, 18, 31, 0.85);
+      border-top: 1px solid var(--border-subtle);
+      backdrop-filter: blur(16px);
+    }
+
+    .chat-input-box-wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 6px 10px 6px 18px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .chat-input-box-wrapper:focus-within {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .chat-text-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      min-height: 28px;
+      max-height: 120px;
+      resize: none;
+    }
+
+    .chat-text-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .btn-chat-execute {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-chat-execute:hover {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+      transform: translateY(-1px);
+    }
+
+    /* CHAT INPUT TOOLBAR & POPUP OPTIONS AT CROSS BUTTON */
+    .chat-input-toolbar-row {
+      max-width: 860px;
+      margin: 0 auto 8px auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* POPUP TOOLS MENU DIRECTLY AT CROSS BUTTON (+) - CLEAN SCROLLABLE VERTICAL ROW */
+    .input-tools-popover {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      left: 0;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(129, 140, 248, 0.45);
+      border-radius: var(--radius-lg);
+      padding: 8px;
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 6px;
+      width: 190px;
+      max-width: calc(100vw - 32px);
+      max-height: 220px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 24px rgba(99, 102, 241, 0.35);
+      backdrop-filter: blur(20px);
+      z-index: 120;
+      animation: popoverFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+
+    .input-tools-popover.open {
+      display: flex;
+    }
+
+    .input-tools-popover::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .input-tools-popover::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 4px;
+    }
+
+    .input-tools-popover .btn-input-tool {
+      width: 100%;
+      justify-content: flex-start;
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      min-height: 38px;
+      box-sizing: border-box;
+      gap: 10px;
+    }
+
+    .input-tools-popover::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 14px;
+      width: 12px;
+      height: 12px;
+      background: rgba(15, 23, 42, 0.98);
+      border-right: 1px solid rgba(129, 140, 248, 0.45);
+      border-bottom: 1px solid rgba(129, 140, 248, 0.45);
+      transform: rotate(45deg);
+    }
+
+    /* PROMPT COMMAND BAR (DYNAMICALLY ACTIVATED ON COMMANDS: CREATE / GENERATE / DRAW / ETC.) */
+    .prompt-command-bar {
+      max-width: 860px;
+      margin: 0 auto 8px auto;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 27, 75, 0.95));
+      border: 1px solid rgba(236, 72, 153, 0.45);
+      border-radius: var(--radius-md);
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 16px rgba(236, 72, 153, 0.2);
+      backdrop-filter: blur(14px);
+      animation: popoverFadeIn 0.18s ease-out;
+      flex-wrap: wrap;
+      z-index: 20;
+    }
+
+    .prompt-command-bar.code-mode {
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 16px rgba(56, 189, 248, 0.2);
+    }
+
+    .prompt-command-bar.action-mode {
+      border-color: rgba(16, 185, 129, 0.45);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 16px rgba(16, 185, 129, 0.2);
+    }
+
+    .cmd-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #f472b6;
+      background: rgba(236, 72, 153, 0.15);
+      border: 1px solid rgba(236, 72, 153, 0.35);
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+    }
+
+    .cmd-badge.blue {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+
+    .cmd-badge.green {
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .cmd-inline-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      flex-wrap: nowrap;
+    }
+    .cmd-inline-pills::-webkit-scrollbar { display: none; }
+
+    .cmd-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .cmd-pill:hover {
+      background: rgba(236, 72, 153, 0.25);
+      border-color: #ec4899;
+      color: #fff;
+    }
+
+    .cmd-pill.active {
+      background: rgba(236, 72, 153, 0.35);
+      border-color: #ec4899;
+      color: #fff;
+      box-shadow: 0 0 8px rgba(236, 72, 153, 0.4);
+    }
+
+    .cmd-hint-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    @keyframes popoverFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* LIVE SMS NOTIFICATION BANNER */
+    .live-sms-banner {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      max-width: 440px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(24, 24, 52, 0.98));
+      border: 1px solid #38bdf8;
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 28px rgba(56, 189, 248, 0.35);
+      z-index: 999999;
+      animation: slideDownSms 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideDownSms {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sms-banner-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .sms-banner-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sms-banner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sms-banner-text {
+      font-size: 12px;
+      color: #e2e8f0;
+      line-height: 1.45;
+    }
+
+    .sms-banner-action {
+      background: #0284c7;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      cursor: pointer;
+      margin-top: 4px;
+      align-self: flex-start;
+    }
+
+    .sms-banner-action:hover {
+      background: #0369a1;
+    }
+
+    .sms-banner-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .sms-banner-close:hover {
+      color: #fff;
+    }
+
+    .btn-input-tool {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      min-height: 36px;
+    }
+
+    .btn-input-tool:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+
+    .btn-input-tool.voice-tool {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.35);
+      color: #a5b4fc;
+    }
+
+    .btn-input-tool.voice-tool:hover {
+      background: rgba(99, 102, 241, 0.22);
+      color: #fff;
+    }
+
+    .btn-input-tool.voice-tool.active {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+      color: #fca5a5;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+      animation: pulseRecord 1.5s infinite;
+    }
+
+    @keyframes pulseRecord {
+      0%, 100% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 24px rgba(239, 68, 68, 0.8); }
+    }
+
+    .btn-input-tool.camera-tool {
+      background: rgba(6, 182, 212, 0.1);
+      border-color: rgba(6, 182, 212, 0.3);
+      color: #67e8f9;
+    }
+
+    .btn-input-tool.image-gen-tool {
+      background: rgba(236, 72, 153, 0.15);
+      border-color: rgba(236, 72, 153, 0.4);
+      color: #f472b6;
+    }
+
+    .btn-input-tool.image-gen-tool:hover {
+      background: rgba(236, 72, 153, 0.3);
+      border-color: rgba(236, 72, 153, 0.7);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(236, 72, 153, 0.45);
+    }
+
+    /* CROSS TOGGLE BUTTON (+) ON THE INPUT BAR */
+    .btn-input-cross-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #cbd5e1;
+      font-size: 22px;
+      font-weight: 300;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+
+    .btn-input-cross-toggle:hover {
+      background: rgba(99, 102, 241, 0.25);
+      border-color: rgba(99, 102, 241, 0.6);
+      color: #fff;
+      transform: scale(1.08);
+    }
+
+    .btn-input-cross-toggle.active {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: rgba(239, 68, 68, 0.6);
+      color: #fca5a5;
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+    }
+
+    /* CAMERA BUTTON AT SIDE OF EXECUTE BUTTON */
+    .btn-camera-inline {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #f8fafc;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-camera-inline:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* VIRTUAL ROBOT CURSOR (UNTOUCHED MOUSE AUTONOMATION ENGINE) */
+    .virtual-robot-cursor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999999;
+      transform: translate(-3px, -3px);
+      transition: left 0.42s cubic-bezier(0.22, 1, 0.36, 1), top 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .robot-cursor-pointer {
+      width: 26px;
+      height: 26px;
+      filter: drop-shadow(0 2px 10px rgba(99, 102, 241, 0.9));
+    }
+
+    .robot-cursor-tag {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(15, 23, 42, 0.95));
+      border: 1px solid #818cf8;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #e0e7ff;
+      white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 0 12px rgba(99, 102, 241, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .robot-click-ripple {
+      position: fixed;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #38bdf8;
+      background: rgba(56, 189, 248, 0.35);
+      pointer-events: none;
+      z-index: 999998;
+      transform: translate(-50%, -50%) scale(0.2);
+      animation: robotRippleAnim 0.45s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+
+    @keyframes robotRippleAnim {
+      to {
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0;
+      }
+    }
+
+    .untouched-mouse-status-bar {
+      background: linear-gradient(90deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.2));
+      border-bottom: 1px solid rgba(129, 140, 248, 0.4);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: #e0e7ff;
+      animation: fadeInStatus 0.3s ease;
+    }
+
+    .untouched-emotion-pill {
+      background: rgba(236, 72, 153, 0.2);
+      border: 1px solid rgba(236, 72, 153, 0.5);
+      color: #fbcfe8;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .btn-input-tool.camera-tool:hover {
+      background: rgba(6, 182, 212, 0.2);
+      color: #fff;
+    }
+
+    .btn-input-tool.file-tool {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+    }
+
+    .btn-input-tool.file-tool:hover {
+      background: rgba(16, 185, 129, 0.2);
+      color: #fff;
+    }
+
+    /* ATTACHMENTS PREVIEW TRAY */
+    .attachments-preview-bar {
+      max-width: 860px;
+      margin: 0 auto 8px auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-md);
+      padding: 8px 12px;
+    }
+
+    .attachment-chip {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 4px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #e2e8f0;
+      max-width: 260px;
+    }
+
+    .attachment-chip img {
+      width: 24px;
+      height: 24px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .attachment-chip .chip-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .attachment-chip .btn-remove-chip {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 2px;
+      display: flex;
+      align-items: center;
+    }
+
+    .attachment-chip .btn-remove-chip:hover {
+      color: #ef4444;
+    }
+
+    /* LIVE CAMERA MODAL STYLES */
+    .camera-viewfinder-box {
+      width: 100%;
+      height: 320px;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .camera-viewfinder-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .camera-action-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* FILE IMPORT MODAL STYLES */
+    .file-import-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+    }
+
+    .file-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .file-tab-btn.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--accent-primary);
+      color: #818cf8;
+    }
+
+    .file-dropzone-box {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.2);
+      transition: all 0.2s;
+    }
+
+    .file-dropzone-box:hover {
+      border-color: #6366f1;
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    /* MODAL OVERLAYS */
+    .modal-overlay-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 15, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-overlay-backdrop.active {
+      display: flex;
+    }
+
+    .modal-dialog-card {
+      background: rgba(17, 23, 40, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(99, 102, 241, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      max-height: 90vh;
+    }
+
+    .modal-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .modal-header-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-modal-close {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 14px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .btn-modal-close:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    /* UPGRADE TIERS MODAL */
+    .upgrade-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .plan-pricing-card {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .plan-pricing-card:hover {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+    }
+
+    .plan-pricing-card.featured {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-buy-tier {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      color: #fff;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: auto;
+    }
+
+    .btn-buy-tier:hover {
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+    }
+
+    /* SETTINGS 11-TAB OVERLAY */
+    .settings-layout-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      height: 540px;
+      width: 820px;
+    }
+
+    .settings-sidebar-nav {
+      background: rgba(0, 0, 0, 0.4);
+      border-right: 1px solid var(--border-subtle);
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+    }
+
+    .settings-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .settings-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    .settings-tab-btn.active {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--accent-primary);
+      color: #818cf8;
+      font-weight: 700;
+    }
+
+    .settings-tab-content-area {
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .settings-panel-pane {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .settings-panel-pane.active {
+      display: flex;
+    }
+
+    .settings-dropdown {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .settings-dropdown:focus {
+      border-color: var(--accent-primary);
+    }
+
+    /* TOAST */
+    .toast-popup {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(17, 23, 40, 0.95);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      z-index: 200;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(12px);
+    }
+
+    .toast-popup.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* TRI-MODEL PIPELINE BADGE & ACTIONS */
+    .tri-model-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      flex-wrap: wrap;
+    }
+
+    .tri-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: #a5b4fc;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 6px #34d399;
+      display: inline-block;
+    }
+
+    .tri-verified-chip {
+      background: rgba(99, 102, 241, 0.18);
+      border: 1px solid rgba(129, 140, 248, 0.4);
+      padding: 3px 9px;
+      border-radius: 6px;
+      color: #c7d2fe;
+      font-weight: 700;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      letter-spacing: 0.2px;
+    }
+
+    .msg-action-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .msg-btn-action {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      color: #94a3b8;
+      font-size: 11px;
+      padding: 3px 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      min-height: 28px;
+    }
+
+    .msg-btn-action:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    /* MOBILE NAVIGATION STYLING */
+    .mobile-menu-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 20px;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      margin-right: 8px;
+      touch-action: manipulation;
+    }
+
+    .mobile-drawer-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 950;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .mobile-drawer-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .mobile-nav-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 280px;
+      max-width: 80vw;
+      background: #0d121f;
+      border-right: 1px solid var(--border-subtle);
+      z-index: 960;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .mobile-nav-drawer.active {
+      transform: translateX(0);
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 16px;
+    }
+
+    .mobile-drawer-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 20px;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mobile-user-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .mobile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .mobile-username {
+      font-weight: 700;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .mobile-user-tier {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .mobile-nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .m-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      color: #cbd5e1;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      min-height: 44px;
+      text-decoration: none;
+    }
+
+    .m-nav-item:active, .m-nav-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .m-nav-item.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+    }
+
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(13, 18, 31, 0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border-subtle);
+      z-index: 50;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 8px;
+    }
+
+    .mobile-tab-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      height: 100%;
+      min-height: 44px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .mobile-tab-btn.active, .mobile-tab-btn:hover {
+      color: #818cf8;
+    }
+
+    .m-tab-icon {
+      font-size: 18px;
+    }
+
+    .m-tab-label {
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    /* ═══════════════════════════════════════════════════════════ */
+    /* MJ SCI-FI CORE HUD & ALT 3-SECOND ACTIVATION STYLES         */
+    /* ═══════════════════════════════════════════════════════════ */
+    .mj-hud-frame {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .mj-hud-insignia {
+      position: absolute;
+      top: -12px;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #d946ef;
+      text-shadow: 0 0 12px rgba(217, 70, 239, 0.8), 0 0 24px rgba(217, 70, 239, 0.4);
+      background: rgba(13, 18, 31, 0.9);
+      border: 1px solid rgba(217, 70, 239, 0.5);
+      padding: 2px 14px;
+      border-radius: 20px;
+      z-index: 10;
+      box-shadow: 0 0 15px rgba(217, 70, 239, 0.3);
+      text-transform: uppercase;
+    }
+
+    .mj-telemetry-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mj-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(217, 70, 239, 0.1);
+      border: 1px solid rgba(217, 70, 239, 0.3);
+      color: #f0abfc;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .mj-pill-badge.cyan {
+      background: rgba(6, 182, 212, 0.1);
+      border-color: rgba(6, 182, 212, 0.35);
+      color: #67e8f9;
+    }
+
+    .mj-pill-badge.green {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #6ee7b7;
+    }
+
+    /* ALT KEY 3-SECOND ACTIVATION OVERLAY */
+    .alt-activation-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 18, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    .alt-activation-card {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(217, 70, 239, 0.5);
+      box-shadow: 0 0 40px rgba(217, 70, 239, 0.4), 0 0 80px rgba(99, 102, 241, 0.25);
+      border-radius: 20px;
+      padding: 28px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      min-width: 320px;
+      transform: scale(1);
+      animation: pulseAltCard 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseAltCard {
+      0%, 100% { transform: scale(1); border-color: rgba(217, 70, 239, 0.5); }
+      50% { transform: scale(1.02); border-color: rgba(217, 70, 239, 0.9); box-shadow: 0 0 50px rgba(217, 70, 239, 0.6); }
+    }
+
+    .alt-ring-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+
+    .alt-progress-svg {
+      width: 100px;
+      height: 100px;
+      transform: rotate(-90deg);
+    }
+
+    .alt-ring-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.1);
+      stroke-width: 6;
+    }
+
+    .alt-ring-fill {
+      fill: none;
+      stroke: #d946ef;
+      stroke-width: 6;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.05s linear;
+      filter: drop-shadow(0 0 8px #d946ef);
+    }
+
+    .alt-ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .alt-center-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .alt-countdown-num {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .alt-activation-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alt-activation-title kbd {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-family: inherit;
+      color: #f0abfc;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .alt-activation-subtitle {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .alt-progress-bar-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .alt-progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6366f1, #d946ef);
+      box-shadow: 0 0 10px #d946ef;
+      transition: width 0.05s linear;
+    }
+
+    /* AUTONOMOUS ACTION CARD (IN CHAT) */
+    .autonomous-action-card {
+      margin-top: 10px;
+      padding: 12px 16px;
+      background: rgba(13, 18, 31, 0.7);
+      border: 1px solid rgba(217, 70, 239, 0.35);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .action-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .action-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #d946ef;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .action-status-pill {
+      font-size: 10px;
+      font-weight: 700;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .action-card-body {
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .action-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #38bdf8;
+      text-decoration: none;
+      margin-top: 4px;
+      padding: 4px 8px;
+      background: rgba(56, 189, 248, 0.1);
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      align-self: flex-start;
+      transition: all 0.2s;
+    }
+
+    .action-card-link:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #fff;
+    }
+
+    /* ═══════════════════════════════════════════════════════════ */
+    /* SCREEN AUTOMATION WORKSTATION WINDOW (VIDEO REPLICATION)    */
+    /* ═══════════════════════════════════════════════════════════ */
+    .screen-auto-dialog {
+      width: 920px;
+      max-width: 96vw;
+      height: 640px;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      padding: 0 !important;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #0b0f19;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(168, 85, 247, 0.2);
+    }
+
+    .screen-auto-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #0f172a;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      user-select: none;
+    }
+
+    .window-dot-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .win-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: inline-block;
+      transition: opacity 0.2s;
+    }
+
+    .win-dot:hover { opacity: 0.8; }
+    .win-dot.red { background: #ef4444; }
+    .win-dot.yellow { background: #f59e0b; }
+    .win-dot.green { background: #10b981; }
+
+    .screen-auto-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-dot-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseDot 1.5s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    .screen-auto-window-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .screen-auto-mode-badge {
+      font-size: 10px;
+      font-weight: 800;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .screen-auto-tabs-bar {
+      display: flex;
+      background: #090d16;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      overflow-x: auto;
+    }
+
+    .screen-tab-btn {
+      padding: 10px 18px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .screen-tab-btn:hover {
+      color: #f1f5f9;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .screen-tab-btn.active {
+      color: #a855f7;
+      border-bottom-color: #a855f7;
+      background: rgba(168, 85, 247, 0.08);
+    }
+
+    .screen-tab-content {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+    }
+
+    /* WHATSAPP AUTOMATION WORKSPACE */
+    .wa-workspace-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background: #111b21;
+    }
+
+    .wa-sidebar {
+      width: 280px;
+      background: #111b21;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wa-sidebar-header {
+      padding: 12px;
+      background: #202c33;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .wa-my-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wa-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #00a884;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .wa-avatar.my-avatar {
+      background: #7c3aed;
+    }
+
+    .wa-profile-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #e9edef;
+    }
+
+    .wa-profile-status {
+      font-size: 11px;
+      color: #00a884;
+    }
+
+    .wa-search-bar {
+      padding: 8px 12px;
+      background: #111b21;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .wa-search-bar input {
+      width: 100%;
+      padding: 6px 12px;
+      background: #202c33;
+      border: none;
+      border-radius: 8px;
+      color: #e9edef;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .wa-contacts-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .wa-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      transition: background 0.15s;
+    }
+
+    .wa-contact-item:hover {
+      background: #202c33;
+    }
+
+    .wa-contact-item.active {
+      background: #2a3942;
+    }
+
+    .wa-contact-meta {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .wa-contact-row-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2px;
+    }
+
+    .wa-contact-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e9edef;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .wa-msg-time {
+      font-size: 11px;
+      color: #8696a0;
+    }
+
+    .wa-last-msg {
+      font-size: 12px;
+      color: #8696a0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* RIGHT CHAT STAGE */
+    .wa-chat-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #0b141a;
+      position: relative;
+    }
+
+    .wa-chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #202c33;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .wa-chat-contact-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .wa-active-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #e9edef;
+    }
+
+    .wa-active-status {
+      font-size: 11px;
+      color: #00a884;
+    }
+
+    .wa-chat-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .wa-header-icon {
+      font-size: 16px;
+      cursor: pointer;
+      opacity: 0.75;
+      transition: opacity 0.2s;
+    }
+    .wa-header-icon:hover { opacity: 1; }
+
+    .wa-btn-real {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #00a884;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .wa-btn-real:hover { background: #008f70; }
+
+    .wa-chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: #0b141a;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+
+    .wa-encryption-notice {
+      align-self: center;
+      background: #182229;
+      color: #ffe69c;
+      font-size: 11px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 230, 156, 0.15);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .wa-bubble {
+      max-width: 65%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.4;
+      position: relative;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .wa-bubble.incoming {
+      align-self: flex-start;
+      background: #202c33;
+      color: #e9edef;
+      border-top-left-radius: 0;
+    }
+
+    .wa-bubble.outgoing {
+      align-self: flex-end;
+      background: #005c4b;
+      color: #e9edef;
+      border-top-right-radius: 0;
+    }
+
+    .wa-bubble-time {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: right;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+
+    .wa-double-tick {
+      color: #53bdeb;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .wa-input-dock {
+      background: #202c33;
+      padding: 8px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .wa-typing-indicator-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #00a884;
+      font-weight: 600;
+    }
+
+    .wa-typing-dots span {
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background: #00a884;
+      border-radius: 50%;
+      margin-right: 2px;
+      animation: waveDot 1s infinite alternate;
+    }
+    .wa-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .wa-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes waveDot {
+      from { transform: translateY(0); }
+      to { transform: translateY(-4px); }
+    }
+
+    .wa-input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wa-emoji-icon, .wa-attach-icon {
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    .wa-input-wrapper {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .wa-input-wrapper input {
+      width: 100%;
+      padding: 8px 12px;
+      background: #2a3942;
+      border: none;
+      border-radius: 8px;
+      color: #e9edef;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .wa-blinking-cursor {
+      position: absolute;
+      right: 12px;
+      color: #00a884;
+      font-weight: 900;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .wa-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #00a884;
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.2s;
+    }
+
+    .wa-send-btn:hover {
+      transform: scale(1.05);
+      background: #029474;
+    }
+
+    .wa-test-dispatch-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #111b21;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .wa-dispatch-inputs {
+      display: flex;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .wa-dispatch-inputs input {
+      padding: 4px 8px;
+      background: #202c33;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 11px;
+    }
+
+    .wa-dispatch-inputs input:first-child { width: 140px; }
+    .wa-dispatch-inputs input:last-child { flex: 1; }
+
+    .wa-btn-simulate {
+      background: linear-gradient(135deg, #00a884, #059669);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    /* EMAIL WORKSPACE */
+    .email-workspace-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background: #0b0f19;
+    }
+
+    .email-list-pane {
+      width: 320px;
+      background: #0f172a;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      overflow-y: auto;
+    }
+
+    .email-pane-header {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .email-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .email-item:hover { background: rgba(255, 255, 255, 0.03); }
+    .email-item.active { background: rgba(6, 182, 212, 0.08); border-left: 3px solid #06b6d4; }
+
+    .email-item-from { font-size: 12px; font-weight: 700; color: #f1f5f9; }
+    .email-item-subject { font-size: 13px; font-weight: 600; color: #38bdf8; margin: 2px 0; }
+    .email-item-snippet { font-size: 11px; color: #94a3b8; line-height: 1.4; }
+    .email-item-date { font-size: 10px; color: #64748b; margin-top: 4px; }
+
+    .email-view-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      overflow-y: auto;
+      gap: 16px;
+    }
+
+    .email-view-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 12px;
+    }
+
+    .email-view-header h4 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 6px 0;
+    }
+
+    .email-meta-line {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .email-body-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .email-auto-reply-box {
+      background: #0f172a;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .email-reply-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #67e8f9;
+    }
+
+    .email-reply-status {
+      font-size: 10px;
+      font-weight: 800;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .email-reply-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .email-reply-fields input, .email-reply-fields textarea {
+      padding: 8px 12px;
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .email-reply-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .email-progress-bar {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .email-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #06b6d4, #10b981);
+      transition: width 1.2s ease-out;
+    }
+
+    /* YOUTUBE ASSISTANT WORKSPACE */
+    .yt-workspace-container {
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: #0a0d14;
+      overflow-y: auto;
+    }
+
+    .yt-search-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .yt-search-bar input {
+      flex: 1;
+      padding: 10px 14px;
+      background: #161e2e;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .yt-presets-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .yt-player-card {
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .yt-video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .yt-video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .yt-video-details {
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .yt-video-details h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    /* SYSTEM TERMINAL WORKSPACE */
+    .term-workspace-container {
+      width: 100%;
+      height: 100%;
+      background: #05070c;
+      display: flex;
+      flex-direction: column;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .term-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 14px;
+      background: #0d131f;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .term-body {
+      flex: 1;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .term-line { color: #e2e8f0; }
+    .term-line.info { color: #38bdf8; }
+    .term-line.success { color: #34d399; }
+    .term-line.warn { color: #fbbf24; }
+
+    .term-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: #0d131f;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .term-prompt {
+      color: #a855f7;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .term-input-row input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #34d399;
+      font-family: inherit;
+      font-size: 12px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════ */
+    /* CYBERNETIC ARC REACTOR HUD OVERLAY (VIDEO REPLICATION)      */
+    /* ═══════════════════════════════════════════════════════════ */
+    .cyber-hud-backdrop {
+      background: radial-gradient(circle at center, rgba(15, 23, 42, 0.95), rgba(3, 7, 18, 0.98)) !important;
+      backdrop-filter: blur(12px) !important;
+      z-index: 9999;
+    }
+
+    .cyber-hud-container {
+      width: 95vw;
+      max-width: 1300px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      background: rgba(10, 15, 29, 0.9);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 50px rgba(168, 85, 247, 0.25), inset 0 0 40px rgba(168, 85, 247, 0.08);
+      font-family: 'JetBrains Mono', sans-serif;
+      overflow-y: auto;
+    }
+
+    .cyber-hud-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .cyber-hud-title-bracket {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bracket-tag {
+      font-size: 12px;
+      color: #06b6d4;
+      font-weight: 700;
+    }
+
+    .cyber-hud-title {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #f0abfc;
+      text-shadow: 0 0 16px rgba(217, 70, 239, 0.7);
+      margin: 0;
+    }
+
+    .cyber-hud-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cyber-theme-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cyber-theme-btn.active {
+      border-color: #d946ef;
+      background: rgba(217, 70, 239, 0.2);
+      color: #f0abfc;
+      box-shadow: 0 0 10px rgba(217, 70, 239, 0.4);
+    }
+
+    .cyber-hud-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 280px 1fr 280px;
+      gap: 20px;
+      padding-top: 20px;
+      align-items: center;
+    }
+
+    @media (max-width: 1024px) {
+      .cyber-hud-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    .cyber-hud-panel {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hud-panel-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #38bdf8;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      padding-bottom: 6px;
+    }
+
+    .hud-gauge-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .hud-gauge-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .hud-gauge-val {
+      font-size: 16px;
+      font-weight: 800;
+      color: #34d399;
+    }
+
+    .hud-gauge-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .hud-audio-spectrum-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hud-spectrum-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #a855f7;
+    }
+
+    .hud-spectrum-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 48px;
+      padding: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .spec-bar {
+      flex: 1;
+      background: linear-gradient(to top, #3b82f6, #a855f7, #ec4899);
+      border-radius: 2px;
+      transition: height 0.1s ease;
+    }
+
+    .hud-log-stream {
+      font-size: 10px;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 8px;
+      border-radius: 6px;
+      max-height: 80px;
+      overflow-y: auto;
+    }
+
+    /* CENTER ARC REACTOR */
+    .cyber-hud-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .arc-reactor-wrapper {
+      width: 320px;
+      height: 320px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reactor-ring {
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .outer-ring {
+      width: 300px;
+      height: 300px;
+      border: 2px dashed #a855f7;
+      animation: rotateCw 20s linear infinite;
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
+    }
+
+    .mid-ring {
+      width: 220px;
+      height: 220px;
+      border: 2px solid rgba(6, 182, 212, 0.6);
+      border-left-color: transparent;
+      border-right-color: transparent;
+      animation: rotateCcw 12s linear infinite;
+    }
+
+    .reactor-crosshair {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      pointer-events: none;
+    }
+
+    .reactor-crosshair::before, .reactor-crosshair::after {
+      content: '';
+      position: absolute;
+      background: rgba(168, 85, 247, 0.3);
+    }
+
+    .reactor-crosshair::before {
+      top: 0; left: 50%; width: 1px; height: 100%; transform: translateX(-50%);
+    }
+    .reactor-crosshair::after {
+      left: 0; top: 50%; width: 100%; height: 1px; transform: translateY(-50%);
+    }
+
+    .reactor-inner-core {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ec4899, #7c3aed, #0f172a);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px rgba(217, 70, 239, 0.8), inset 0 0 20px #fff;
+      animation: corePulse 2.5s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes rotateCw { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes rotateCcw { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+    @keyframes corePulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 35px rgba(217, 70, 239, 0.7); }
+      50% { transform: scale(1.06); box-shadow: 0 0 55px rgba(217, 70, 239, 1); }
+    }
+
+    .reactor-core-text {
+      font-size: 13px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #000;
+    }
+
+    .reactor-sub-text {
+      font-size: 9px;
+      font-weight: 800;
+      color: #f0abfc;
+      letter-spacing: 1px;
+    }
+
+    .cyber-hud-center-controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-hud-voice {
+      padding: 10px 18px;
+      background: linear-gradient(135deg, #7c3aed, #d946ef);
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(217, 70, 239, 0.5);
+      transition: all 0.2s;
+    }
+
+    .btn-hud-screen {
+      padding: 10px 18px;
+      background: rgba(6, 182, 212, 0.2);
+      border: 1px solid #06b6d4;
+      color: #67e8f9;
+      border-radius: 24px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-hud-screen:hover {
+      background: #06b6d4;
+      color: #fff;
+    }
+
+    .hud-subroutine-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hud-sub-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+      font-size: 11px;
+    }
+
+    .sub-name { color: #e2e8f0; font-weight: 600; }
+    .sub-badge { font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; }
+    .sub-badge.green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .sub-badge.blue { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+
+    .hud-voice-hints {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .voice-hint-item {
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      font-size: 10px;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .voice-hint-item:hover {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: #a855f7;
+      color: #fff;
+    }
+
+    /* AMBER THEME (VIDEO 1 FIERY HEART ARC REACTOR) */
+    .cyber-hud-container.amber-theme {
+      border-color: rgba(249, 115, 22, 0.5);
+      box-shadow: 0 0 50px rgba(249, 115, 22, 0.25), inset 0 0 40px rgba(249, 115, 22, 0.08);
+    }
+    .cyber-hud-container.amber-theme .cyber-hud-title {
+      color: #fed7aa;
+      text-shadow: 0 0 16px rgba(249, 115, 22, 0.8);
+    }
+    .cyber-hud-container.amber-theme .outer-ring {
+      border-color: #f97316;
+      box-shadow: 0 0 25px rgba(249, 115, 22, 0.5);
+    }
+    .cyber-hud-container.amber-theme .mid-ring {
+      border-color: rgba(250, 204, 21, 0.7);
+      border-left-color: transparent;
+      border-right-color: transparent;
+    }
+    .cyber-hud-container.amber-theme .reactor-inner-core {
+      background: radial-gradient(circle, #f97316, #ea580c, #431407);
+      box-shadow: 0 0 45px rgba(249, 115, 22, 0.9), inset 0 0 20px #fef08a;
+    }
+    .cyber-hud-container.amber-theme .reactor-crosshair::before,
+    .cyber-hud-container.amber-theme .reactor-crosshair::after {
+      background: rgba(249, 115, 22, 0.4);
+    }
+    .cyber-hud-container.amber-theme .btn-hud-voice {
+      background: linear-gradient(135deg, #ea580c, #f97316);
+      box-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
+    }
+
+    /* RESPONSIVE MEDIA QUERIES FOR ANDROID & MOBILE */
+    @media (max-width: 768px) {
+      .collapsible-sidebar {
+        display: none !important;
+      }
+      .mobile-menu-btn {
+        display: flex !important;
+      }
+      .app-exec-switcher {
+        padding: 2px;
+      }
+      .exec-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+        min-height: 36px;
+      }
+      .permission-badge-chip {
+        display: none !important;
+      }
+      .chat-workspace-main {
+        padding-bottom: 64px !important;
+      }
+      .mobile-bottom-nav {
+        display: flex !important;
+      }
+      .chat-input-wrapper {
+        padding: 8px 12px !important;
+      }
+      .chat-text-input {
+        font-size: 15px !important;
+      }
+      .quick-tools-bar {
+        padding: 6px 12px !important;
+      }
+      #three-core-canvas {
+        height: 180px !important;
+      }
+      .welcome-title {
+        font-size: 18px !important;
+      }
+      .welcome-desc {
+        font-size: 12px !important;
+      }
+      .model-selector-bar {
+        padding: 8px 12px !important;
+        gap: 8px;
+      }
+      .chat-bubble-row.ai .msg-content-card,
+      .chat-bubble-row.user .msg-content-card {
+        max-width: 92% !important;
+      }
+      .auth-card-box {
+        padding: 20px 16px !important;
+      }
+    }
+  </style>
+
+  <!-- Three.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="top-header">
+    <!-- MOBILE HAMBURGER MENU BUTTON -->
+    <button class="mobile-menu-btn" id="btn-mobile-menu-toggle" onclick="toggleMobileDrawer()" aria-label="Open Navigation">
+      ☰
+    </button>
+
+    <div class="brand-section">
+      <div class="brand-badge">⚡</div>
+      <div class="brand-title">
+        <span>BLACKMAGIC AI</span>
+      </div>
+
+      <!-- DESKTOP EXECUTABLE APPLICATION SWITCHER -->
+      <div class="app-exec-switcher">
+        <button id="btn-client-exe" class="exec-btn active" onclick="switchPanel('client')">
+          💻 client.exe
+        </button>
+        <button id="btn-admin-exe" class="exec-btn" onclick="switchPanel('admin')">
+          🛡️ admin.exe
+        </button>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <!-- PERMISSION STATUS BADGE -->
+      <div class="permission-badge-chip" id="header-permission-chip">
+        <span id="header-permission-icon">🔒</span>
+        <span id="header-permission-text">Sandbox Bounds</span>
+      </div>
+
+      <!-- USER PROFILE CHIP -->
+      <div class="user-profile-chip" id="user-header-chip" onclick="handleUserChipClick()">
+        <div class="user-avatar" id="header-user-avatar">👤</div>
+        <span class="user-name-text" id="header-user-name">Guest Operative</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE DRAWER BACKDROP & DRAWER -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer">
+    <div class="mobile-drawer-header">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:20px;">⚡</span>
+        <span style="font-weight:800; font-size:16px; color:#fff; letter-spacing:0.5px;">Blackmagic AI</span>
+      </div>
+      <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Close">✕</button>
+    </div>
+
+    <!-- Active User Card -->
+    <div class="mobile-user-card" id="mobile-user-card">
+      <div class="mobile-avatar">👤</div>
+      <div class="mobile-user-info">
+        <div class="mobile-username" id="m-user-name">Guest Operative</div>
+        <div class="mobile-user-tier" id="m-user-tier">Pro Tier • 4.5M Tokens</div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Links -->
+    <div class="mobile-nav-links">
+      <button class="m-nav-item" onclick="closeMobileDrawer(); openOverlay('settings-overlay');">
+        <span class="m-nav-icon">⚙</span>
+        <span class="m-nav-text">Settings & Configuration</span>
+      </button>
+
+      <button class="m-nav-item" onclick="closeMobileDrawer(); openOverlay('upgrade-overlay');">
+        <span class="m-nav-icon">💳</span>
+        <span class="m-nav-text">Upgrade Plan (From ₹499)</span>
+      </button>
+
+      <button class="m-nav-item" onclick="closeMobileDrawer(); clearActiveChat();">
+        <span class="m-nav-icon">🗑</span>
+        <span class="m-nav-text">Clear Chat Stream</span>
+      </button>
+
+      <button class="m-nav-item" onclick="closeMobileDrawer(); openOverlay('dpdp-overlay');">
+        <span class="m-nav-icon">🛡️</span>
+        <span class="m-nav-text">DPDP 2023 Compliance</span>
+      </button>
+
+      <div style="height:1px; background:rgba(255,255,255,0.08); margin:10px 0;"></div>
+
+      <div style="padding:0 12px; font-size:11px; text-transform:uppercase; color:#64748b; letter-spacing:1px; margin-bottom:6px;">Executable Panel</div>
+
+      <button class="m-nav-item active" onclick="closeMobileDrawer(); switchPanel('client');">
+        <span class="m-nav-icon">💻</span>
+        <span class="m-nav-text">Client Mode (client.exe)</span>
+      </button>
+
+      <a href="/admin" class="m-nav-item" style="text-decoration:none;">
+        <span class="m-nav-icon">🛡️</span>
+        <span class="m-nav-text">Admin Panel (admin.exe)</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <div class="app-viewport">
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- SCREEN 1: LOGIN / REGISTRATION / FORGOT / OTP VERIFICATION -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="screen-view active" id="login-screen">
+      <div class="auth-card-box" style="position: relative;">
+        <!-- FORM 1: LOGIN FORM -->
+        <div id="login-form-box" class="auth-form-section">
+          <div>
+            <h2 class="auth-header-title">⚡ Initialize Core Session</h2>
+            <p class="auth-header-subtitle">Authenticate your terminal to access multimodal neural pathways.</p>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">Username or Email</label>
+            <input type="text" id="login-username" class="auth-input" placeholder="e.g. your username or email" value="" autocomplete="username" required>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">Passphrase</label>
+            <input type="password" id="login-password" class="auth-input" placeholder="Enter secure passphrase" value="" autocomplete="current-password" required>
+          </div>
+
+          <!-- BUTTON 1: INITIALIZE CORE -->
+          <button id="btn-login-submit" class="btn-auth-action" onclick="performLogin()">
+            <span>⚡ Initialize Core</span>
+          </button>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+            <!-- BUTTON 2: CREATE ACCOUNT -->
+            <button id="btn-show-register" class="btn-auth-link" onclick="showRegisterForm()">
+              Create Account
+            </button>
+
+            <!-- BUTTON 5: FORGET PASSWORD -->
+            <button id="btn-forgot-password" class="btn-auth-link" onclick="showForgotPassword()">
+              Forget Password?
+            </button>
+          </div>
+        </div>
+
+        <!-- FORM 2: REGISTRATION FORM (With Required Phone Number & Gmail) -->
+        <div id="register-form-box" class="auth-form-section" style="display:none;">
+          <div>
+            <h2 class="auth-header-title">🛡️ Create Student Account</h2>
+            <p class="auth-header-subtitle">Mobile number is required to receive your security SMS OTP.</p>
+          </div>
+
+          <!-- ALL REQUIRED FIELDS -->
+          <div class="auth-field-group">
+            <label class="auth-field-label">Full Name *</label>
+            <input type="text" id="register-fullname" class="auth-input" placeholder="e.g. Aarav Sharma" required>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">Age *</label>
+            <input type="number" id="register-age" class="auth-input" placeholder="e.g. 18" min="10" max="100" required>
+          </div>
+
+          <div class="auth-field-group">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label class="auth-field-label">Mobile Phone Number (SMS OTP) *</label>
+              <span style="font-size:10px; color:#38bdf8; font-weight:700;">REQUIRED FOR SMS OTP</span>
+            </div>
+            <input type="tel" id="register-phone" class="auth-input" placeholder="10-digit mobile number (e.g. 9876543210)" maxlength="14" required>
+            <div style="font-size:11px; color:#94a3b8; margin-top:2px;">📱 OTP sender will dispatch verification code directly to this mobile phone via SMS.</div>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">Email Address (Gmail OTP) *</label>
+            <input type="email" id="register-email" class="auth-input" placeholder="e.g. aarav@gmail.com" required>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">Username *</label>
+            <input type="text" id="register-username" class="auth-input" placeholder="Choose a unique username" required>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">Passphrase *</label>
+            <input type="password" id="register-password" class="auth-input" placeholder="Min 8 chars" required>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">Confirm Passphrase *</label>
+            <input type="password" id="register-confirm-password" class="auth-input" placeholder="Re-enter passphrase" required>
+          </div>
+
+          <!-- BUTTON 3: CREATE ACCOUNT (4.5M TOKENS) -->
+          <button id="btn-register-submit" class="btn-auth-action" onclick="performRegister()">
+            <span>✨ Dispatch Dual OTPs (SMS & Email) & Continue</span>
+          </button>
+
+          <!-- BUTTON 4: BACK TO LOGIN -->
+          <button id="btn-back-to-login" class="btn-auth-link" onclick="showLoginForm()">
+            Already have an account? Back to login
+          </button>
+        </div>
+
+        <!-- FORM 3: FORGOT PASSWORD FORM -->
+        <div id="forgot-form-box" class="auth-form-section" style="display:none;">
+          <div>
+            <h2 class="auth-header-title">🔑 Account Recovery</h2>
+            <p class="auth-header-subtitle">Enter your username, email, or mobile to dispatch security OTP.</p>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">Username, Email, or Mobile Phone</label>
+            <input type="text" id="forgot-username" class="auth-input" placeholder="Enter username, email, or mobile">
+          </div>
+
+          <!-- BUTTON 6: REQUEST VERIFICATION -->
+          <button id="btn-forgot-submit" class="btn-auth-action" onclick="submitForgotPassword()">
+            <span>Request Verification Codes ➔</span>
+          </button>
+
+          <!-- BUTTON 7: BACK TO LOGIN -->
+          <button id="btn-forgot-back" class="btn-auth-link" onclick="showLoginForm()">
+            Back to login
+          </button>
+        </div>
+
+        <!-- FORM 4: DUAL OTP VERIFICATION (GMAIL + PHONE NUMBER) -->
+        <div id="otp-form-box" class="auth-form-section" style="display:none;">
+          <div>
+            <h2 class="auth-header-title">🔐 Dual OTP Verification</h2>
+            <p class="auth-header-subtitle" id="otp-phone-display">Verification codes dispatched to your personal Gmail and Mobile Phone.</p>
+          </div>
+
+          <!-- STRICT DEVICE SECURITY ADVISORY (NO CODES REVEALED IN BROWSER) -->
+          <div style="display:flex; flex-direction:column; gap:6px; background:rgba(99, 102, 241, 0.08); border:1px solid rgba(129, 140, 248, 0.3); border-radius:8px; padding:12px; font-size:12px; line-height:1.5;">
+            <div style="display:flex; align-items:center; gap:6px; color:#818cf8; font-weight:600;">
+              <span>🛡️ Physical Device Verification</span>
+            </div>
+            <div style="color:#94a3b8;">
+              To prove ownership of this account, one-time passwords have been dispatched to your personal devices. Check your <strong>Gmail Inbox</strong> and <strong>Phone SMS Messages</strong> to enter the genuine codes below.
+            </div>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">📧 Gmail Security OTP *</label>
+            <input type="text" id="verification-gmail-otp" class="auth-input" placeholder="6-digit Gmail code" maxlength="6" style="text-align:center; font-family:'JetBrains Mono'; font-size:18px; letter-spacing:4px;" required>
+          </div>
+
+          <div class="auth-field-group">
+            <label class="auth-field-label">📱 Mobile Phone SMS OTP *</label>
+            <input type="text" id="verification-otp" class="auth-input" placeholder="6-digit Phone code" maxlength="6" style="text-align:center; font-family:'JetBrains Mono'; font-size:18px; letter-spacing:4px;" required>
+          </div>
+
+          <div class="auth-field-group" id="group-new-password" style="display:none;">
+            <label class="auth-field-label">New Passphrase</label>
+            <input type="password" id="new-password" class="auth-input" placeholder="Enter new secure passphrase">
+          </div>
+
+          <!-- BUTTON 8: VERIFY OTP -->
+          <button id="btn-verify-otp" class="btn-auth-action" onclick="verifyOTP()">
+            <span>✔ Verify Both OTPs & Activate Database Account</span>
+          </button>
+
+          <button id="btn-otp-back" class="btn-auth-link" onclick="showRegisterForm()">
+            Back to edit registration details
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- SCREEN 2: CHAT WORKSPACE (Client Terminal)                  -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <section class="screen-view" id="chat-screen">
+      
+      <!-- LEFT SIDEBAR (Collapses to 52px, expands on hover / pin toggle) -->
+      <aside class="collapsible-sidebar" id="main-sidebar">
+        <div class="sidebar-brand-mini">
+          <span>⚡</span>
+          <span class="sidebar-label">BLACKMAGIC CORE</span>
+          <button id="btn-sidebar-pin-toggle" class="sidebar-pin-btn" onclick="toggleSidebarPin()" title="Pin or unpin sidebar">📌</button>
+        </div>
+
+        <!-- NEW CHAT SHORTCUT -->
+        <button id="btn-sidebar-new-chat" class="sidebar-btn" onclick="startNewChatSession()" title="Start New Chat Session" style="background:rgba(99,102,241,0.15); border-color:rgba(99,102,241,0.3); color:#c7d2fe;">
+          <span class="sidebar-icon">➕</span>
+          <span class="sidebar-label">New Chat</span>
+        </button>
+
+        <!-- CHAT HISTORY BUTTON -->
+        <button id="btn-chat-history" class="sidebar-btn" onclick="toggleChatHistoryDrawer()" title="View Saved Chat History & Conversations">
+          <span class="sidebar-icon">💬</span>
+          <span class="sidebar-label">Chat History</span>
+        </button>
+
+        <!-- PROJECTS BUTTON -->
+        <button id="btn-sidebar-projects" class="sidebar-btn" onclick="toggleProjectsDrawer()" title="Switch or Create Workspace Projects">
+          <span class="sidebar-icon">📁</span>
+          <span class="sidebar-label">Projects</span>
+        </button>
+
+        <!-- BUTTON 9: SETTINGS -->
+        <button id="btn-settings" class="sidebar-btn" onclick="openOverlay('settings-overlay')" title="Open System Settings">
+          <span class="sidebar-icon">⚙</span>
+          <span class="sidebar-label">Settings</span>
+        </button>
+
+        <!-- BUTTON 10: UPGRADE PLAN -->
+        <button id="btn-upgrade" class="sidebar-btn" onclick="openOverlay('upgrade-overlay')" title="Upgrade Neural Subscription Tier">
+          <span class="sidebar-icon">💳</span>
+          <span class="sidebar-label">Upgrade Plan</span>
+        </button>
+
+        <!-- BUTTON 11: CLEAR CHAT -->
+        <button id="btn-clear-chat" class="sidebar-btn" onclick="clearActiveChat()" title="Purge Current Message Stream">
+          <span class="sidebar-icon">🗑</span>
+          <span class="sidebar-label">Clear Chat</span>
+        </button>
+
+        <div class="sidebar-footer-spacer"></div>
+
+        <!-- ACTIVE PROJECT INDICATOR -->
+        <div class="sidebar-active-project-pill" id="sidebar-active-project-pill" onclick="toggleProjectsDrawer()" title="Click to switch or manage workspace projects">
+          <span style="font-size:13px;">📁</span>
+          <span class="sidebar-label" id="sidebar-active-project-name">Default Project</span>
+        </div>
+      </aside>
+
+      <!-- MAIN WORKSPACE -->
+      <main class="chat-workspace-main">
+        
+        <!-- MODEL SELECTOR BAR -->
+        <div class="model-selector-bar">
+          <div class="model-buttons-group">
+            <!-- BUTTON 12: BLACKFIRE V2 -->
+            <button id="btn-model-v2" class="model-selector-btn active" onclick="selectModelProvider('blackfire v2')">
+              <span>⚡</span>
+              <span>Blackfire V2</span>
+            </button>
+
+            <!-- BUTTON 13: BLACKFIRE ULTRA -->
+            <button id="btn-model-ultra" class="model-selector-btn" onclick="selectModelProvider('blackfire ultra')">
+              <span>🔥</span>
+              <span>Blackfire Ultra</span>
+            </button>
+
+            <!-- BUTTON 14: BLACKCLOUD V2 -->
+            <button id="btn-model-cloud" class="model-selector-btn" onclick="selectModelProvider('blackcloud v2')">
+              <span>☁️</span>
+              <span>Blackcloud V2</span>
+            </button>
+          </div>
+
+          <!-- BUTTON 15: DPDP 2023 VERIFIED -->
+          <button id="btn-dpdp-badge" class="btn-dpdp-badge" onclick="openOverlay('dpdp-overlay')" title="View Digital Personal Data Protection Act Compliance">
+            <span>🛡️</span>
+            <span>DPDP 2023 Verified</span>
+          </button>
+        </div>
+
+        <!-- CHAT STREAM -->
+        <div class="chat-stream-viewport" id="chat-thread-box">
+          <div class="chat-welcome-banner" id="chat-welcome-banner">
+            <div class="mj-hud-frame">
+              <div id="three-core-canvas"></div>
+            </div>
+            <h1 class="welcome-title">Blackmagic • Autonomous 3D AI Workstation</h1>
+            <p class="welcome-desc">
+              Emotionally intelligent AI assistant equipped with proactive workflows, continuous voice dialogue, and live autonomous screen automation.
+            </p>
+            <div class="mj-telemetry-row">
+              <span class="mj-pill-badge" id="mj-active-emotion-badge">⚡ Emotion: Loyal & Sharp</span>
+              <span class="mj-pill-badge cyan">⚡ Status: Autonomous Execution</span>
+              <span class="mj-pill-badge green">🎙️ Voice Mode: Ready</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIVE VOICE HUD OVERLAY (REAL-TIME SPEECH-TO-TEXT & SPEECH SYNTHESIS) -->
+        <div id="live-voice-hud" class="live-voice-hud">
+          <div class="sound-bars"><span></span><span></span><span></span></div>
+          <span id="live-voice-status" style="font-size:12px; color:#d946ef; font-weight:700;">🔊 Blackmagic:</span>
+          <span id="live-voice-text" class="live-voice-text">Listening... Speak naturally or ask anything!</span>
+          <button class="btn-voice-cancel" onclick="stopVoiceMode()">Stop</button>
+        </div>
+
+        <!-- CHAT INPUT AREA -->
+        <div class="chat-input-bar-container">
+          <!-- ACTIVE ATTACHMENTS PREVIEW TRAY -->
+          <div id="attachments-preview-bar" class="attachments-preview-bar" style="display:none;"></div>
+
+          <!-- DYNAMIC PROMPT COMMAND BAR: ACTIVATED INSTANTLY ON USER COMMANDS (CREATE / GENERATE / DRAW / ETC.) -->
+          <div id="prompt-command-bar" class="prompt-command-bar" style="display:none;">
+            <div style="display:flex; align-items:center; gap:8px; overflow:hidden; flex-wrap:wrap;">
+              <span id="prompt-cmd-badge" class="cmd-badge">⚡ Command: Create Image</span>
+              <div id="prompt-cmd-pills" class="cmd-inline-pills"></div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+              <span class="cmd-hint-text">Press Enter ➔ to execute</span>
+              <button type="button" onclick="dismissPromptCommandBar()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:12px; padding:2px 4px;" title="Dismiss helper">✕</button>
+            </div>
+          </div>
+
+          <div class="chat-input-box-wrapper" style="position: relative;">
+            <!-- POPUP TOOLS MENU DIRECTLY AT CROSS BUTTON (+) - CLEAN SCROLLABLE VERTICAL ROW -->
+            <div id="input-tools-drawer" class="input-tools-popover" style="display:none;" onclick="event.stopPropagation()">
+              <!-- 1: VOICE MODE -->
+              <button id="btn-voice-mode-toggle" class="btn-input-tool voice-tool" onclick="handleSelectVoiceMode(event)" title="Toggle Voice Mode">
+                <span id="voice-mode-icon">🎙️</span>
+                <span id="voice-mode-label">Voice Mode</span>
+              </button>
+
+              <!-- 2: PICTURE (PC / STORAGE) -->
+              <input type="file" id="input-pc-image" accept="image/*" style="display:none;" onchange="handleImagePcSelect(event)">
+              <button id="btn-upload-pc-image" class="btn-input-tool" onclick="handleSelectPicture(event)" title="Upload a picture from PC or local storage">
+                <span>🖼️</span>
+                <span>Picture</span>
+              </button>
+
+              <!-- 3: ATTACH FILES -->
+              <button id="btn-open-file-import" class="btn-input-tool file-tool" onclick="handleSelectAttachFile(event)" title="Attach source code & files">
+                <span>📎</span>
+                <span>Attach Files</span>
+              </button>
+            </div>
+
+            <!-- CROSS BUTTON (+) TO REVEAL VOICE MODE, PICTURE, ATTACH FILES -->
+            <button id="btn-toggle-input-tools" class="btn-input-cross-toggle" onclick="toggleInputToolsDrawer(event)" title="Attach options & tools (+)">
+              <span id="cross-toggle-icon">+</span>
+            </button>
+
+            <!-- INPUT 13: CHAT USER INPUT -->
+            <textarea 
+              id="chat-user-input" 
+              class="chat-text-input" 
+              placeholder="Ask anything, type commands (e.g. open whatsapp and write...), or speak..." 
+              rows="1"
+              onkeydown="handleChatInputKeyDown(event)"></textarea>
+
+            <!-- CAMERA BUTTON AT SIDE OF EXECUTE BUTTON -->
+            <button id="btn-upload-live-camera" class="btn-camera-inline" onclick="openLiveCameraModal()" title="Optical Camera Capture">
+              <span>📸</span>
+            </button>
+
+            <!-- BUTTON 20: EXECUTE -->
+            <button id="btn-chat-execute" class="btn-chat-execute" onclick="sendChatMessage()" title="Execute query (Enter)">
+              <span>Execute ➔</span>
+            </button>
+          </div>
+        </div>
+
+      </main>
+
+    </section>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODAL 1: PLAN UPGRADE OVERLAY                              -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay-backdrop" id="upgrade-overlay">
+    <div class="modal-dialog-card" style="width:780px;">
+      <div class="modal-header-row">
+        <h3 class="modal-header-title">💳 Upgrade Neural Subscription Plan</h3>
+        <!-- BUTTON 21: CLOSE UPGRADE -->
+        <button id="btn-close-upgrade" class="btn-modal-close" onclick="closeOverlay('upgrade-overlay')">✕</button>
+      </div>
+
+      <div class="upgrade-cards-grid">
+        <!-- TIER 1: PRO -->
+        <div class="plan-pricing-card">
+          <div style="font-size:16px; font-weight:800; color:#fff;">Pro Tier</div>
+          <div style="font-size:24px; font-weight:800; color:#818cf8;">₹499 <span style="font-size:12px; color:var(--text-muted);">/mo</span></div>
+          <p style="font-size:12px; color:var(--text-secondary); line-height:1.5;">
+            Accelerated token quota with access to Blackfire V2 & complete 10M+ edge offline questions.
+          </p>
+          <!-- BUTTON 22: BUY PRO -->
+          <button id="btn-buy-pro" class="btn-buy-tier" onclick="buyPlan('Pro')">
+            Buy Tier (₹499)
+          </button>
+        </div>
+
+        <!-- TIER 2: PREMIUM -->
+        <div class="plan-pricing-card featured">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-size:16px; font-weight:800; color:#fff;">Premium Tier</div>
+            <span style="font-size:10px; background:#6366f1; color:#fff; padding:2px 8px; border-radius:12px; font-weight:700;">POPULAR</span>
+          </div>
+          <div style="font-size:24px; font-weight:800; color:#38bdf8;">₹2,999 <span style="font-size:12px; color:var(--text-muted);">/mo</span></div>
+          <p style="font-size:12px; color:var(--text-secondary); line-height:1.5;">
+            Unlimited token streams on Blackfire Ultra with high-priority cluster failover routing.
+          </p>
+          <!-- BUTTON 23: BUY PREMIUM -->
+          <button id="btn-buy-premium" class="btn-buy-tier" onclick="buyPlan('Premium')">
+            Buy Tier (₹2,999)
+          </button>
+        </div>
+
+        <!-- TIER 3: ULTRA -->
+        <div class="plan-pricing-card">
+          <div style="font-size:16px; font-weight:800; color:#fff;">Ultra Enterprise</div>
+          <div style="font-size:24px; font-weight:800; color:#ec4899;">₹7,999 <span style="font-size:12px; color:var(--text-muted);">/mo</span></div>
+          <p style="font-size:12px; color:var(--text-secondary); line-height:1.5;">
+            Dedicated neural clusters, full root appliance privileges, and continuous audit tracing.
+          </p>
+          <!-- BUTTON 24: BUY ULTRA -->
+          <button id="btn-buy-ultra" class="btn-buy-tier" onclick="buyPlan('Ultra')">
+            Buy Tier (₹7,999)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODAL 2: SYSTEM SETTINGS (11 Tabs)                         -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay-backdrop" id="settings-overlay">
+    <div class="modal-dialog-card" style="width:840px;">
+      <div class="modal-header-row">
+        <h3 class="modal-header-title">⚙ System Configuration & Settings</h3>
+        <!-- BUTTON 25: CLOSE SETTINGS -->
+        <button id="btn-close-settings" class="btn-modal-close" onclick="closeOverlay('settings-overlay')">✕</button>
+      </div>
+
+      <div class="settings-layout-grid">
+        <!-- 11 TAB BUTTONS -->
+        <div class="settings-sidebar-nav">
+          <button id="tab-btn-profile" class="settings-tab-btn active" onclick="switchSettingsTab('settings-profile')">
+            <span>👤</span><span>Profile Portal</span>
+          </button>
+          <button id="tab-btn-perms" class="settings-tab-btn" onclick="switchSettingsTab('settings-perms')">
+            <span>🔒</span><span>Permissions</span>
+          </button>
+          <button id="tab-btn-appearance" class="settings-tab-btn" onclick="switchSettingsTab('settings-appearance')">
+            <span>🎨</span><span>Appearance</span>
+          </button>
+          <button id="tab-btn-models" class="settings-tab-btn" onclick="switchSettingsTab('settings-models')">
+            <span>✨</span><span>Models Pool</span>
+          </button>
+          <button id="tab-btn-custom" class="settings-tab-btn" onclick="switchSettingsTab('settings-custom')">
+            <span>🛠</span><span>Customizations</span>
+          </button>
+          <button id="tab-btn-feedback" class="settings-tab-btn" onclick="switchSettingsTab('settings-feedback')">
+            <span>💬</span><span>Feedback</span>
+          </button>
+          <button id="tab-btn-shortcuts" class="settings-tab-btn" onclick="switchSettingsTab('settings-shortcuts')">
+            <span>⌨</span><span>Shortcut Keys</span>
+          </button>
+          <button id="tab-btn-projects" class="settings-tab-btn" onclick="switchSettingsTab('settings-projects')">
+            <span>📁</span><span>Projects Config</span>
+          </button>
+          <button id="tab-btn-routing" class="settings-tab-btn" onclick="switchSettingsTab('settings-routing')">
+            <span>🌐</span><span>Regional Routing</span>
+          </button>
+          <button id="tab-btn-export-import" class="settings-tab-btn" onclick="switchSettingsTab('settings-export-import')">
+            <span>📦</span><span>Import/Export Config</span>
+          </button>
+        </div>
+
+        <!-- TAB CONTENT AREA -->
+        <div class="settings-tab-content-area">
+          
+          <!-- TAB 1: PROFILE PORTAL -->
+          <div class="settings-panel-pane active" id="settings-profile">
+            <h4 style="color:#fff;">Operative Identity & Telemetry</h4>
+            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:8px; padding:16px; display:flex; flex-direction:column; gap:8px; font-size:13px;">
+              <div><strong>Full Name:</strong> <span id="settings-profile-fullname" style="color:#cbd5e1;">Operative Student</span></div>
+              <div><strong>Username:</strong> <span id="settings-profile-username" style="color:#818cf8;">operative</span></div>
+              <div><strong>Registered Mobile:</strong> <span id="settings-profile-mobile" style="color:#34d399;">+91 9876543210</span></div>
+              <div><strong>Gmail / Email:</strong> <span id="settings-profile-email" style="color:#cbd5e1;">operative@blackmagic.ai</span></div>
+              <div><strong>Age:</strong> <span id="settings-profile-age" style="color:#f59e0b;">16 years</span></div>
+              <div><strong>Active Plan:</strong> <span id="settings-profile-tier" style="color:#ec4899; font-weight:700;">Pro Tier</span></div>
+            </div>
+            <button class="btn-auth-action" style="background:#ef4444; width:fit-content;" onclick="performLogout()">
+              Sign Out of Terminal
+            </button>
+          </div>
+
+          <!-- TAB 2: PERMISSIONS (DROPDOWN 1) -->
+          <div class="settings-panel-pane" id="settings-perms">
+            <h4 style="color:#fff;">Appliance Execution Bounds</h4>
+            <p style="font-size:13px; color:var(--text-secondary);">
+              Select runtime privilege level for command execution and security interception.
+            </p>
+            <div class="auth-field-group">
+              <label class="auth-field-label">Permission Level</label>
+              <!-- DROPDOWN 1: PERMISSION LEVEL -->
+              <select id="user-permission-level" class="settings-dropdown" onchange="updatePermissionLevel()">
+                <option value="Sandbox Bounds">1. Sandbox Bounds (Restricted memory & safe queries)</option>
+                <option value="Restricted Mode">2. Restricted Mode (Heuristic sandbox active)</option>
+                <option value="Full System Access">3. Full System Access (Full appliance root & active audit trace)</option>
+              </select>
+            </div>
+            <div style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.3); border-radius:8px; padding:12px; font-size:12px; color:#fca5a5;">
+              <strong>Appliance Tracing Notice:</strong> When "Full System Access" is enabled, all executions, network queries, and anomalous commands are traced in real time by the Kavach DPDP Sentinel and logged in the Admin Command Center.
+            </div>
+          </div>
+
+          <!-- TAB 3: APPEARANCE (DROPDOWN 2) -->
+          <div class="settings-panel-pane" id="settings-appearance">
+            <h4 style="color:#fff;">Display & Typography Scaling</h4>
+            <div class="auth-field-group">
+              <label class="auth-field-label">Font Scale</label>
+              <!-- DROPDOWN 2: FONT SCALE -->
+              <select id="font-scale-select" class="settings-dropdown" onchange="applyFontScale()">
+                <option value="13px">Small (13px)</option>
+                <option value="14px" selected>Default (14px)</option>
+                <option value="16px">Large (16px)</option>
+                <option value="18px">Extra Large (18px)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- TAB 4: MODELS POOL & TRI-MODEL PIPELINE -->
+          <div class="settings-panel-pane" id="settings-models">
+            <h4 style="color:#fff;">Tri-Model Orchestration & Profit Economics</h4>
+            
+            <div style="background:rgba(99, 102, 241, 0.1); border:1px solid rgba(99, 102, 241, 0.3); border-radius:8px; padding:14px; font-size:13px; line-height:1.5;">
+              <strong style="color:#818cf8;">✨ Tri-Model Pipeline (Live Orchestration):</strong>
+              <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px; color:#cbd5e1;">
+                <div>• <strong>Stage 1 (ChatGPT)</strong>: Prompt Structurer & Intent Decomposition.</div>
+                <div>• <strong>Stage 2 (Claude 3.5)</strong>: Nuanced Authoring, Deep Code & Insight Generation.</div>
+                <div>• <strong>Stage 3 (Gemini 2.5 Flash)</strong>: Fact-Checking, Grounding & Autonomous Failover.</div>
+              </div>
+            </div>
+
+            <!-- INTELLIGENCE & VERIFICATION PIPELINE -->
+            <div style="background:rgba(99, 102, 241, 0.1); border:1px solid rgba(99, 102, 241, 0.3); border-radius:8px; padding:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong style="color:#a5b4fc;">✨ Gemini Fact-Checking & Grounding</strong>
+                <span class="tri-verified-chip">Verified by Gemini</span>
+              </div>
+              <div style="margin-top:8px; font-size:12px; color:#cbd5e1; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <div>• <strong>Verification Core:</strong> Gemini 3.6 Flash</div>
+                <div>• <strong>Fact Grounding:</strong> Real-time Temporal Audit</div>
+                <div>• <strong>Failover:</strong> Auto-Fallback to Gemini Core</div>
+                <div>• <strong>Quality Rating:</strong> Verified Accurate</div>
+              </div>
+            </div>
+
+            <!-- OPTIONAL API KEYS -->
+            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:10px;">
+              <strong style="color:#fff; font-size:13px;">🔑 Custom API Key Overrides (Optional)</strong>
+              <p style="font-size:12px; color:var(--text-muted); margin:0;">
+                If not provided, the high-capability Gemini 3.6 Flash core autonomously executes all generation and verification stages.
+              </p>
+              <div class="auth-field-group" style="margin:0;">
+                <label class="auth-field-label">OpenAI API Key (ChatGPT Stage)</label>
+                <input type="password" id="custom-openai-key" class="auth-input" placeholder="sk-..." onchange="saveCustomKey('openai', this.value)">
+              </div>
+              <div class="auth-field-group" style="margin:0;">
+                <label class="auth-field-label">Anthropic API Key (Claude Stage)</label>
+                <input type="password" id="custom-anthropic-key" class="auth-input" placeholder="sk-ant-..." onchange="saveCustomKey('anthropic', this.value)">
+              </div>
+              <div class="auth-field-group" style="margin:0;">
+                <label class="auth-field-label">Google Gemini API Key (Grounding Stage)</label>
+                <input type="password" id="custom-gemini-key" class="auth-input" placeholder="AIzaSy..." onchange="saveCustomKey('gemini', this.value)">
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: CUSTOMIZATIONS -->
+          <div class="settings-panel-pane" id="settings-custom">
+            <h4 style="color:#fff;">Terminal Customizations</h4>
+            <p style="font-size:13px; color:var(--text-secondary);">3D Visualizer Hologram: Active (Three.js WebGL)</p>
+            <p style="font-size:13px; color:var(--text-secondary);">Live Wake-Word Listener: "hey magic" / "magic stop"</p>
+          </div>
+
+          <!-- TAB 6: FEEDBACK -->
+          <div class="settings-panel-pane" id="settings-feedback">
+            <h4 style="color:#fff;">Submit Operative Feedback Note</h4>
+            <!-- INPUT 14: FEEDBACK NOTE TEXT -->
+            <textarea id="feedback-note-text" class="auth-input" rows="4" placeholder="Report observations, model accuracy, or hardware anomalies..."></textarea>
+            <!-- BUTTON 37: SUBMIT NOTE -->
+            <button id="btn-submit-feedback" class="btn-auth-action" style="width:fit-content;" onclick="submitFeedback()">
+              <span>Submit Note ➔</span>
+            </button>
+          </div>
+
+          <!-- TAB 7: SHORTCUT KEYS -->
+          <div class="settings-panel-pane" id="settings-shortcuts">
+            <h4 style="color:#fff;">8 Master Keyboard Shortcuts</h4>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px; font-family:'JetBrains Mono';">
+              <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px;"><strong>Enter</strong>: Send Message</div>
+              <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px;"><strong>Ctrl + N</strong>: New Chat</div>
+              <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px;"><strong>Ctrl + H</strong>: History Overview</div>
+              <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px;"><strong>Ctrl + S</strong>: Settings Overlay</div>
+              <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px;"><strong>Ctrl + Shift + F</strong>: Feedback Tab</div>
+              <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px;"><strong>Ctrl + P</strong>: Projects Tab</div>
+              <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px;"><strong>"hey magic"</strong>: Voice Wake</div>
+              <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px;"><strong>"magic stop"</strong>: Emergency Halt</div>
+            </div>
+          </div>
+
+          <!-- TAB 8: PROJECTS CONFIGURATION -->
+          <div class="settings-panel-pane" id="settings-projects">
+            <h4 style="color:#fff;">Projects Configuration</h4>
+            <div class="auth-field-group">
+              <label class="auth-field-label">New Project Name</label>
+              <!-- INPUT 15: NEW PROJECT NAME -->
+              <input type="text" id="new-project-name" class="auth-input" placeholder="e.g. SIH 2026 Autonomous Drone">
+            </div>
+            <!-- BUTTON 38: CREATE PROJECT -->
+            <button id="btn-create-project" class="btn-auth-action" style="width:fit-content;" onclick="createNewProject()">
+              <span>Create Project</span>
+            </button>
+          </div>
+
+          <!-- TAB 9: REGIONAL ROUTING (DROPDOWN 3) -->
+          <div class="settings-panel-pane" id="settings-routing">
+            <h4 style="color:#fff;">Regional Edge Routing</h4>
+            <div class="auth-field-group">
+              <label class="auth-field-label">Routing Preference</label>
+              <!-- DROPDOWN 3: ROUTING PREFERENCE -->
+              <select id="user-routing-preference" class="settings-dropdown" onchange="updateRoutingPreference()">
+                <option value="Auto">1. Auto Balanced (Failover enabled)</option>
+                <option value="USA">2. USA Region Node (us-east-1)</option>
+                <option value="India">3. India Region Node (ap-south-1)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- TAB 10: IMPORT/EXPORT CONFIG -->
+          <div class="settings-panel-pane" id="settings-export-import">
+            <h4 style="color:#fff;">Configuration Backup & Restore</h4>
+            <div style="display:flex; gap:12px;">
+              <!-- BUTTON 39: EXPORT CONFIG -->
+              <button id="btn-export-config" class="btn-auth-action" onclick="exportConfig()">
+                <span>Export Config (.json)</span>
+              </button>
+              <!-- BUTTON 40: IMPORT CONFIG -->
+              <button id="btn-import-config" class="btn-auth-action" style="background:#06b6d4;" onclick="triggerImportConfig()">
+                <span>Import Config</span>
+              </button>
+              <input type="file" id="import-config-file" accept=".json" style="display:none;" onchange="handleImportFile(event)">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODAL 3: DPDP 2023 COMPLIANCE AUDIT OVERLAY                 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay-backdrop" id="dpdp-overlay">
+    <div class="modal-dialog-card" style="width:680px; padding:24px;">
+      <div class="modal-header-row" style="padding:0 0 16px;">
+        <h3 class="modal-header-title">🛡️ DPDP Act 2023 Legal & Privacy Compliance</h3>
+        <button class="btn-modal-close" onclick="closeOverlay('dpdp-overlay')">✕</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px; font-size:13px; color:var(--text-secondary); line-height:1.6; overflow-y:auto;">
+        <p><strong>Digital Personal Data Protection (DPDP) Act 2023 Compliance Architecture</strong></p>
+        <p>Blackmagic AI terminal enforces strict data safety standards aligned with Section 8 & 16 of the DPDP Act 2023 for minors and students:</p>
+        <ul style="padding-left:20px; display:flex; flex-direction:column; gap:6px;">
+          <li><strong>Age Verification & Safeguards:</strong> Accounts for minors require age logging, mobile OTP authentication, and automated content shielding.</li>
+          <li><strong>Appliance Tracing & Audit Sentinel:</strong> All system executions and anomalous prompts are traced with unique cryptographic audit IDs.</li>
+          <li><strong>Zero Persistent Tracking:</strong> Local inference queries are processed in memory with offline-first failover.</li>
+          <li><strong>Real-Time Admin Alerting:</strong> Hostile, exploit, or cyber threats trigger immediate alerts in the Administrative Command Center.</li>
+        </ul>
+        <div style="background:rgba(16, 185, 129, 0.1); border:1px solid rgba(16, 185, 129, 0.3); border-radius:8px; padding:12px; color:#34d399; font-weight:600;">
+          ✔ Status: Full Compliance Verified for Smart India Hackathon Junior 2026.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODAL 4: LIVE CAMERA OPTICAL CAPTURE                       -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay-backdrop" id="modal-live-camera">
+    <div class="modal-dialog-card" style="width:560px; padding:24px;">
+      <div class="modal-header-row" style="padding:0 0 16px;">
+        <h3 class="modal-header-title">📸 Camera Optical Capture</h3>
+        <button class="btn-modal-close" onclick="closeLiveCameraModal()">✕</button>
+      </div>
+
+      <div class="camera-viewfinder-box">
+        <video id="live-camera-feed" autoplay playsinline muted></video>
+        <canvas id="live-camera-canvas" style="display:none;"></canvas>
+      </div>
+
+      <div id="camera-status-text" style="font-size:12px; color:var(--text-secondary); text-align:center; margin-top:10px;">
+        Connecting to camera feed...
+      </div>
+
+      <div class="camera-action-controls">
+        <button id="btn-camera-snap" class="btn-chat-execute" style="background:#06b6d4;" onclick="captureLivePhoto()">
+          <span>📸 Capture Photo</span>
+        </button>
+        <button id="btn-camera-flip" class="btn-input-tool" onclick="switchLiveCamera()">
+          <span>🔄 Flip Camera</span>
+        </button>
+        <button id="btn-camera-cancel" class="btn-input-tool" onclick="closeLiveCameraModal()">
+          <span>✕ Cancel</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODAL 5: MULTI-SOURCE FILE IMPORTER (ONEDRIVE / GITHUB / SSD) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay-backdrop" id="modal-file-import">
+    <div class="modal-dialog-card" style="width:680px; padding:24px;">
+      <div class="modal-header-row" style="padding:0 0 16px;">
+        <h3 class="modal-header-title">📁 Import Source Files</h3>
+        <button class="btn-modal-close" onclick="closeFileImportModal()">✕</button>
+      </div>
+
+      <!-- TABS -->
+      <div class="file-import-tabs">
+        <button id="tab-btn-ssd" class="file-tab-btn active" onclick="switchFileSourceTab('ssd')">
+          <span>📂 Local Storage / SSD</span>
+        </button>
+        <button id="tab-btn-github" class="file-tab-btn" onclick="switchFileSourceTab('github')">
+          <span>🐙 GitHub Repository</span>
+        </button>
+        <button id="tab-btn-onedrive" class="file-tab-btn" onclick="switchFileSourceTab('onedrive')">
+          <span>☁️ OneDrive / Cloud</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: LOCAL STORAGE / SSD -->
+      <div id="tab-content-ssd" class="file-tab-content">
+        <input type="file" id="input-ssd-files" multiple style="display:none;" onchange="handleSsdFilesSelected(event)">
+        <div class="file-dropzone-box" onclick="document.getElementById('input-ssd-files').click()">
+          <div style="font-size:36px; margin-bottom:10px;">📂</div>
+          <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:4px;">
+            Click to Browse or Drag & Drop Files from Storage / SSD
+          </div>
+          <div style="font-size:12px; color:var(--text-muted);">
+            Supports code, scripts & data: .html, .js, .ts, .py, .css, .json, .csv, .md, .txt, .pdf, .docx, .sql, .cpp
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: GITHUB IMPORTER -->
+      <div id="tab-content-github" class="file-tab-content" style="display:none;">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:6px; display:block;">
+              GitHub File or Repository URL
+            </label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="input-github-url" class="auth-text-input" style="flex:1;" placeholder="https://github.com/owner/repo/blob/main/index.js">
+              <button id="btn-fetch-github" class="btn-chat-execute" onclick="fetchFromGitHub()">
+                <span>Fetch File</span>
+              </button>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+            <span style="font-size:11px; color:var(--text-muted);">Quick Samples:</span>
+            <button class="quick-chip-btn" onclick="loadSampleGithub('react')">React Component</button>
+            <button class="quick-chip-btn" onclick="loadSampleGithub('express')">Express Server</button>
+            <button class="quick-chip-btn" onclick="loadSampleGithub('python')">Python Script</button>
+          </div>
+          <div id="github-preview-box" style="display:none; max-height:160px; overflow-y:auto; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); border-radius:8px; padding:10px; font-family:'JetBrains Mono'; font-size:11px; color:#a5f3fc;"></div>
+          <button id="btn-attach-github-file" class="btn-chat-execute" style="display:none; align-self:flex-end; background:#10b981;" onclick="attachCurrentGithubFile()">
+            <span>✔ Attach GitHub File to Prompt</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 3: ONEDRIVE / CLOUD STORAGE -->
+      <div id="tab-content-onedrive" class="file-tab-content" style="display:none;">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; color:var(--text-secondary); margin-bottom:6px; display:block;">
+              OneDrive Share Link or Synced Document
+            </label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="input-onedrive-url" class="auth-text-input" style="flex:1;" placeholder="https://1drv.ms/u/s!... or OneDrive document link">
+              <button id="btn-import-onedrive" class="btn-chat-execute" onclick="importFromOneDrive()">
+                <span>Import Link</span>
+              </button>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+            <span style="font-size:11px; color:var(--text-muted);">OneDrive Presets:</span>
+            <button class="quick-chip-btn" onclick="loadSampleOneDrive('project_spec')">Project Architecture Spec</button>
+            <button class="quick-chip-btn" onclick="loadSampleOneDrive('ml_dataset')">ML Dataset Scheme</button>
+            <button class="quick-chip-btn" onclick="loadSampleOneDrive('sensor_telemetry')">IoT Sensor Log</button>
+          </div>
+          <div id="onedrive-preview-box" style="display:none; max-height:160px; overflow-y:auto; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); border-radius:8px; padding:10px; font-family:'JetBrains Mono'; font-size:11px; color:#fde047;"></div>
+          <button id="btn-attach-onedrive-file" class="btn-chat-execute" style="display:none; align-self:flex-end; background:#10b981;" onclick="attachCurrentOneDriveFile()">
+            <span>✔ Attach OneDrive Document to Prompt</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODAL: IMAGE LIGHTBOX FULLSCREEN PREVIEW                   -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay-backdrop" id="modal-image-lightbox" onclick="closeImageLightbox()">
+    <div style="position:relative; max-width:92vw; max-height:92vh; display:flex; flex-direction:column; align-items:center; justify-content:center;" onclick="event.stopPropagation()">
+      <div style="position:absolute; top:-40px; right:0; display:flex; gap:10px; align-items:center;">
+        <a id="lightbox-download-link" href="#" download="blackmagic-ai.png" class="btn-input-tool" style="font-size:12px; padding:4px 12px; color:#fff; background:rgba(0,0,0,0.6);" target="_blank">
+          ⬇ Download Image
+        </a>
+        <button class="btn-modal-close" style="width:32px; height:32px; background:rgba(0,0,0,0.6); color:#fff; border-radius:50%; cursor:pointer;" onclick="closeImageLightbox()">✕</button>
+      </div>
+      <img id="lightbox-image-target" src="" alt="Fullscreen preview" style="max-width:90vw; max-height:82vh; object-fit:contain; border-radius:12px; box-shadow:0 25px 60px rgba(0,0,0,0.95); border:1px solid rgba(255,255,255,0.15);" />
+      <div id="lightbox-caption-target" style="margin-top:10px; font-size:13px; color:#e2e8f0; font-weight:600; text-align:center; max-width:80vw; background:rgba(0,0,0,0.6); padding:4px 14px; border-radius:16px;"></div>
+    </div>
+  </div>
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay-backdrop" id="modal-appliances" style="display:none;">
+    <div class="modal-dialog-card" style="width:680px; padding:24px;">
+      <div class="modal-header-row" style="padding:0 0 16px;">
+        <h3 class="modal-header-title">⚡ Hardware & Smart Appliance Tracing</h3>
+        <button class="btn-modal-close" onclick="closeApplianceModal()">✕</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <p style="font-size:12px; color:var(--text-secondary); margin:0;">
+          Real-time IoT telemetry, smart relay switches, and power consumption tracing managed autonomously by Blackmagic.
+        </p>
+
+        <!-- APPLIANCE GRID -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">
+          <!-- APPLIANCE 1: WORKSTATION LIGHTS -->
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:22px;">💡</span>
+              <span id="appliance-status-lights" class="sub-badge green">ACTIVE (100%)</span>
+            </div>
+            <div style="font-weight:700; font-size:13px; color:#f8fafc;">Ambient Studio Lights</div>
+            <div style="font-size:11px; color:var(--text-muted);">Smart Hue Relay &bull; 24W</div>
+            <button class="quick-chip-btn" id="btn-toggle-lights" onclick="toggleAppliance('lights')">Turn Off</button>
+          </div>
+
+          <!-- APPLIANCE 2: HVAC / COOLING -->
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:22px;">❄️</span>
+              <span id="appliance-status-ac" class="sub-badge green">COOL (22°C)</span>
+            </div>
+            <div style="font-weight:700; font-size:13px; color:#f8fafc;">Server Room HVAC</div>
+            <div style="font-size:11px; color:var(--text-muted);">Inverter Climate &bull; 620W</div>
+            <button class="quick-chip-btn" id="btn-toggle-ac" onclick="toggleAppliance('ac')">Toggle Eco Mode</button>
+          </div>
+
+          <!-- APPLIANCE 3: 3D PRINTER / WORKBENCH -->
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:22px;">🖨️</span>
+              <span id="appliance-status-printer" class="sub-badge blue">STANDBY</span>
+            </div>
+            <div style="font-weight:700; font-size:13px; color:#f8fafc;">OctoPrint 3D Core</div>
+            <div style="font-size:11px; color:var(--text-muted);">Bed Temp: 24°C &bull; 0W</div>
+            <button class="quick-chip-btn" id="btn-toggle-printer" onclick="toggleAppliance('printer')">Start Preheat</button>
+          </div>
+        </div>
+
+        <!-- POWER & DPDP AUDIT FOOTER -->
+        <div style="background:rgba(6, 182, 212, 0.08); border:1px solid rgba(6, 182, 212, 0.25); border-radius:8px; padding:12px; font-size:12px; color:#67e8f9; display:flex; justify-content:space-between; align-items:center;">
+          <span>⚡ Total Workstation Power Draw: <strong id="total-power-draw">644 W</strong></span>
+          <span style="font-family:'JetBrains Mono'; font-size:11px;">DPDP Sentinel: 0 Breaches</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODAL 6: AUTONOMOUS SCREEN AUTOMATION WORKSTATION WINDOW    -->
+  <!-- (Interactive WhatsApp Web, Corporate Email, YouTube, Terminal) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay-backdrop" id="modal-screen-automation" style="display:none;">
+    <div class="modal-dialog-card screen-auto-dialog">
+      <!-- OS WINDOW TITLE BAR -->
+      <div class="screen-auto-titlebar">
+        <div class="window-dot-controls">
+          <span class="win-dot red" onclick="closeScreenAutomationModal()" title="Close"></span>
+          <span class="win-dot yellow" onclick="closeScreenAutomationModal()" title="Minimize"></span>
+          <span class="win-dot green" onclick="maximizeScreenAutomationModal()" title="Maximize"></span>
+        </div>
+        <div class="screen-auto-title">
+          <span class="live-dot-pulse"></span>
+          <span>BLACKMAGIC OS &bull; AUTONOMOUS SCREEN AUTOMATION</span>
+        </div>
+        <div class="screen-auto-window-actions">
+          <span class="screen-auto-mode-badge" id="screen-auto-status-pill">⚡ AUTONOMOUS DISPATCH LIVE</span>
+          <button class="btn-modal-close" onclick="closeScreenAutomationModal()" title="Close Window">✕</button>
+        </div>
+      </div>
+
+      <!-- UNTOUCHED MOUSE AUTONOMOUS CONTROL HUD BAR -->
+      <div class="untouched-mouse-status-bar" id="untouched-mouse-status-bar" style="display:none;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px;">🤖</span>
+          <span id="untouched-status-text"><strong>UNTOUCHED MOUSE AUTONOMOUS CONTROL:</strong> Blackmagic virtual robot cursor navigating & typing...</span>
+        </div>
+        <span class="untouched-emotion-pill" id="untouched-emotion-pill">😊 Emotion: Warm & Playful</span>
+      </div>
+
+      <!-- WORKSTATION TABS -->
+      <div class="screen-auto-tabs-bar">
+        <button id="screen-tab-whatsapp" class="screen-tab-btn active" onclick="switchScreenAutoTab('whatsapp')">
+          <span>💬 WhatsApp Web Automation</span>
+        </button>
+        <button id="screen-tab-notepad" class="screen-tab-btn" onclick="switchScreenAutoTab('notepad')">
+          <span>📝 Notepad & Code Writer</span>
+        </button>
+        <button id="screen-tab-email" class="screen-tab-btn" onclick="switchScreenAutoTab('email')">
+          <span>✉️ Corporate Email Dispatch</span>
+        </button>
+        <button id="screen-tab-youtube" class="screen-tab-btn" onclick="switchScreenAutoTab('youtube')">
+          <span>📺 YouTube Media Assistant</span>
+        </button>
+        <button id="screen-tab-terminal" class="screen-tab-btn" onclick="switchScreenAutoTab('terminal')">
+          <span>💻 System Task Terminal</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: WHATSAPP WEB AUTOMATION -->
+      <div id="screen-content-whatsapp" class="screen-tab-content active">
+        <div class="wa-workspace-container">
+          <!-- LEFT CONTACTS SIDEBAR -->
+          <div class="wa-sidebar">
+            <div class="wa-sidebar-header">
+              <div class="wa-my-profile">
+                <div class="wa-avatar my-avatar">BM</div>
+                <div class="wa-profile-info">
+                  <div class="wa-profile-name">Blackmagic Agent</div>
+                  <div class="wa-profile-status">● Automated Host</div>
+                </div>
+              </div>
+            </div>
+            <div class="wa-search-bar">
+              <input type="text" id="wa-search-input" placeholder="Search contacts..." oninput="filterWaContacts(this.value)">
+            </div>
+            <div class="wa-contacts-list" id="wa-contacts-list">
+              <div class="wa-contact-item active" onclick="selectWaContact('Sumit Sharma', '+91 98765 43210')">
+                <div class="wa-avatar">SS</div>
+                <div class="wa-contact-meta">
+                  <div class="wa-contact-row-top">
+                    <span class="wa-contact-name">Sumit Sharma</span>
+                    <span class="wa-msg-time">10:42 AM</span>
+                  </div>
+                  <div class="wa-last-msg">Library me padhai kar rahe hain...</div>
+                </div>
+              </div>
+              <div class="wa-contact-item" onclick="selectWaContact('Rahul Verma', '+91 91234 56789')">
+                <div class="wa-avatar">RV</div>
+                <div class="wa-contact-meta">
+                  <div class="wa-contact-row-top">
+                    <span class="wa-contact-name">Rahul Verma</span>
+                    <span class="wa-msg-time">09:15 AM</span>
+                  </div>
+                  <div class="wa-last-msg">Notes share kar diye hain bhai.</div>
+                </div>
+              </div>
+              <div class="wa-contact-item" onclick="selectWaContact('Pooja Gupta', '+91 98112 23344')">
+                <div class="wa-avatar">PG</div>
+                <div class="wa-contact-meta">
+                  <div class="wa-contact-row-top">
+                    <span class="wa-contact-name">Pooja Gupta</span>
+                    <span class="wa-msg-time">Yesterday</span>
+                  </div>
+                  <div class="wa-last-msg">Meeting link for presentation?</div>
+                </div>
+              </div>
+              <div class="wa-contact-item" onclick="selectWaContact('Tech Lead / Manager', '+91 99887 76655')">
+                <div class="wa-avatar">TL</div>
+                <div class="wa-contact-meta">
+                  <div class="wa-contact-row-top">
+                    <span class="wa-contact-name">Tech Lead / Manager</span>
+                    <span class="wa-msg-time">Yesterday</span>
+                  </div>
+                  <div class="wa-last-msg">AI model deployment looks great.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT CHAT STAGE -->
+          <div class="wa-chat-stage">
+            <!-- CHAT HEADER -->
+            <div class="wa-chat-header">
+              <div class="wa-chat-contact-info">
+                <div class="wa-avatar" id="wa-active-avatar">SS</div>
+                <div>
+                  <div class="wa-active-name" id="wa-active-name">Sumit Sharma</div>
+                  <div class="wa-active-status" id="wa-active-status">online &bull; end-to-end encrypted</div>
+                </div>
+              </div>
+              <div class="wa-chat-header-actions">
+                <span class="wa-header-icon" title="Voice Call">📞</span>
+                <span class="wa-header-icon" title="Video Call">📹</span>
+                <a href="https://web.whatsapp.com" target="_blank" class="wa-btn-real" title="Open Real WhatsApp Web in new tab">
+                  <span>📱 Real WhatsApp Web ➔</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- CHAT THREAD VIEWPORT -->
+            <div class="wa-chat-messages" id="wa-chat-messages">
+              <div class="wa-encryption-notice">
+                🔒 Messages are end-to-end encrypted. Handled autonomously by Blackmagic AI.
+              </div>
+              <div class="wa-bubble incoming">
+                <div class="wa-bubble-text">Bhai mummy call kar rahi hai, tune phone kyu nahi uthaya?</div>
+                <div class="wa-bubble-time">10:41 AM</div>
+              </div>
+              <div class="wa-bubble outgoing" id="wa-latest-outgoing-bubble">
+                <div class="wa-bubble-text" id="wa-latest-outgoing-text">Aunty ko bol de hum library me padh rahe hain!</div>
+                <div class="wa-bubble-time">10:42 AM <span class="wa-double-tick">✓✓</span></div>
+              </div>
+            </div>
+
+            <!-- TYPING SIMULATOR & INPUT BAR -->
+            <div class="wa-input-dock">
+              <div class="wa-typing-indicator-bar" id="wa-typing-indicator" style="display:none;">
+                <span class="wa-typing-dots"><span></span><span></span><span></span></span>
+                <span id="wa-typing-text">Blackmagic is autonomously typing...</span>
+              </div>
+              <div class="wa-input-row">
+                <span class="wa-emoji-icon">😊</span>
+                <span class="wa-attach-icon">📎</span>
+                <div class="wa-input-wrapper">
+                  <input type="text" id="wa-live-input" placeholder="Type a message or trigger Blackmagic auto-dispatch..." onkeydown="if(event.key==='Enter') executeManualWaSend()">
+                  <span class="wa-blinking-cursor" id="wa-blinking-cursor" style="display:none;">|</span>
+                </div>
+                <button class="wa-send-btn" id="wa-send-btn" onclick="executeManualWaSend()" title="Send WhatsApp Message">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- MANUAL / TEST AUTONOMOUS DISPATCH CONTROLS -->
+            <div class="wa-test-dispatch-bar">
+              <div class="wa-dispatch-inputs">
+                <input type="text" id="wa-dispatch-recipient" placeholder="Recipient Name / Number" value="Sumit Sharma">
+                <input type="text" id="wa-dispatch-message" placeholder="Message content to automate..." value="Hum log library me padhai kar rahe hain.">
+              </div>
+              <button class="wa-btn-simulate" onclick="triggerSimulatedWaDispatch()">
+                <span>⚡ Simulate Autonomous Dispatch</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: CORPORATE EMAIL DISPATCH -->
+      <div id="screen-content-email" class="screen-tab-content" style="display:none;">
+        <div class="email-workspace-container">
+          <!-- EMAIL LIST -->
+          <div class="email-list-pane">
+            <div class="email-pane-header">📥 Incoming Corporate Mail</div>
+            <div class="email-item active" onclick="selectEmailItem('offer')">
+              <div class="email-item-from">HR Department &bull; TechCorp</div>
+              <div class="email-item-subject">Official Offer Letter & Onboarding Schedule</div>
+              <div class="email-item-snippet">Dear Candidate, please confirm your acceptance of the terms...</div>
+              <div class="email-item-date">Today, 09:30 AM</div>
+            </div>
+            <div class="email-item" onclick="selectEmailItem('sih')">
+              <div class="email-item-from">SIH Evaluation Committee</div>
+              <div class="email-item-subject">Autonomous Workstation Submission Review</div>
+              <div class="email-item-snippet">Your multi-model 3D AI pipeline has cleared phase 1...</div>
+              <div class="email-item-date">Yesterday</div>
+            </div>
+            <div class="email-item" onclick="selectEmailItem('cloud')">
+              <div class="email-item-from">CloudOps Infrastructure</div>
+              <div class="email-item-subject">Autonomous Failover Node Synchronization</div>
+              <div class="email-item-snippet">All USA and India clusters report 100% health...</div>
+              <div class="email-item-date">2 days ago</div>
+            </div>
+          </div>
+
+          <!-- EMAIL VIEW & AUTO-REPLY COMPOSER -->
+          <div class="email-view-pane">
+            <div class="email-view-header">
+              <h4 id="email-view-subject">Official Offer Letter & Onboarding Schedule</h4>
+              <div class="email-meta-line">
+                <strong>From:</strong> <span id="email-view-from">hr@techcorp.com</span> &bull; 
+                <strong>Date:</strong> <span id="email-view-date">Today, 09:30 AM</span>
+              </div>
+            </div>
+            <div class="email-body-text" id="email-view-body">
+              Dear Boss,<br><br>
+              We are pleased to offer you the position. Please review the attached contract and confirm your acceptance along with your preferred workstation credentials.<br><br>
+              Best regards,<br>
+              HR Recruitment Cell
+            </div>
+
+            <!-- AUTO-REPLY DOCK -->
+            <div class="email-auto-reply-box">
+              <div class="email-reply-title">
+                <span>🤖 Blackmagic Autonomous Auto-Reply</span>
+                <span class="email-reply-status" id="email-reply-status">READY TO DISPATCH</span>
+              </div>
+              <div class="email-reply-fields">
+                <input type="text" id="email-reply-to" value="hr@techcorp.com" placeholder="To:">
+                <input type="text" id="email-reply-subj" value="Re: Official Offer Letter - Confirmation of Terms" placeholder="Subject:">
+                <textarea id="email-reply-body" rows="3" placeholder="Auto-generated reply...">Thank you for the communication. I confirm receipt and accept the terms outlined. Looking forward to synchronizing with the operations team.</textarea>
+              </div>
+              <div class="email-reply-actions">
+                <button class="btn-chat-execute" style="background:#06b6d4;" onclick="executeAutonomousEmailSend()">
+                  <span>⚡ Dispatch Auto-Reply Now</span>
+                </button>
+                <div id="email-send-progress" class="email-progress-bar" style="display:none;">
+                  <div class="email-progress-fill"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: YOUTUBE MEDIA ASSISTANT -->
+      <div id="screen-content-youtube" class="screen-tab-content" style="display:none;">
+        <div class="yt-workspace-container">
+          <div class="yt-search-bar">
+            <input type="text" id="yt-search-input" placeholder="Search YouTube recipe, tutorial, music or tech..." value="Chole Recipe step by step">
+            <button class="btn-chat-execute" onclick="executeYouTubeSearch()">
+              <span>🔍 Search</span>
+            </button>
+          </div>
+          <div class="yt-presets-row">
+            <span style="font-size:11px; color:var(--text-muted);">Quick Presets:</span>
+            <button class="quick-chip-btn" onclick="setYouTubeQuery('Chole Recipe step by step')">🍲 Chole Recipe</button>
+            <button class="quick-chip-btn" onclick="setYouTubeQuery('Python AI Full Course 2026')">🐍 Python AI Course</button>
+            <button class="quick-chip-btn" onclick="setYouTubeQuery('Three.js 3D Web Development Tutorial')">🌐 Three.js 3D Guide</button>
+            <button class="quick-chip-btn" onclick="setYouTubeQuery('Sci-Fi Cyberpunk Ambient Music')">🎵 Cyberpunk Music</button>
+          </div>
+          <div class="yt-player-card">
+            <div class="yt-video-wrapper">
+              <iframe id="yt-video-iframe" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ" title="YouTube Assistant Player" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            </div>
+            <div class="yt-video-details">
+              <h4 id="yt-video-title">Featured YouTube Assistant Stream</h4>
+              <p id="yt-video-desc" style="font-size:12px; color:var(--text-secondary);">
+                Autonomous media player synchronized with Blackmagic voice search and recipe/tutorial intelligence.
+              </p>
+              <a id="yt-direct-link" href="https://www.youtube.com" target="_blank" class="action-card-link">
+                ▶️ Watch on Full YouTube ➔
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: SYSTEM TASK TERMINAL -->
+      <div id="screen-content-terminal" class="screen-tab-content" style="display:none;">
+        <div class="term-workspace-container">
+          <div class="term-header">
+            <span>● blackmagic@neural-core: ~ (bash 5.2)</span>
+            <span style="color:#06b6d4;">STATUS: NOMINAL</span>
+          </div>
+          <div class="term-body" id="term-log-body">
+            <div class="term-line info">[SYS_INIT] Blackmagic Autonomous Daemon v2.4 initialized.</div>
+            <div class="term-line success">[NET] Cluster nodes active (us-east-1, ap-south-1). Latency: 16ms.</div>
+            <div class="term-line info">[AI_PIPELINE] Gemini 3 Flash multimodal routing armed.</div>
+            <div class="term-line">[AGENT] Ready for autonomous screen automation, voice dialogue, and hardware appliance control.</div>
+          </div>
+          <div class="term-input-row">
+            <span class="term-prompt">blackmagic@core:~$</span>
+            <input type="text" id="term-cmd-input" placeholder="Type command (e.g. status, test-wa, ping, appliances, clear)..." onkeydown="if(event.key==='Enter') executeTermCmd(this.value)">
+            <button class="quick-chip-btn" onclick="executeTermCmd(document.getElementById('term-cmd-input').value)">Run</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: NOTEPAD & AUTONOMOUS CODE WRITER -->
+      <div id="screen-content-notepad" class="screen-tab-content" style="display:none;">
+        <div style="display:flex; flex-direction:column; height:440px; background:#0b1120; border-radius:8px; overflow:hidden; border:1px solid var(--border-subtle);">
+          <div style="background:#1e293b; padding:8px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="display:flex; align-items:center; gap:12px; font-size:12px; color:#94a3b8;">
+              <span style="font-weight:700; color:#f8fafc;" id="notepad-filename">script.py</span>
+              <span>&bull; UTF-8</span>
+              <span id="notepad-save-indicator" style="color:#10b981; font-weight:600;">● Saved</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button id="btn-notepad-save" class="quick-chip-btn" onclick="window.saveNotepadContent()" title="Save File">💾 Save File</button>
+              <button id="btn-notepad-copy" class="quick-chip-btn" onclick="window.copyNotepadContent()" title="Copy Code">📋 Copy</button>
+              <button id="btn-notepad-clear" class="quick-chip-btn" onclick="window.clearNotepadContent()" title="Clear editor">🗑 Clear</button>
+            </div>
+          </div>
+          <div style="flex:1; display:flex; position:relative; overflow:hidden;">
+            <div style="width:40px; background:#020617; border-right:1px solid rgba(255,255,255,0.06); padding:12px 6px; font-family:'JetBrains Mono', monospace; font-size:12px; color:#475569; text-align:right; user-select:none; line-height:1.6;" id="notepad-line-numbers">
+              1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14
+            </div>
+            <textarea id="notepad-text-editor" style="flex:1; background:transparent; border:none; color:#38bdf8; font-family:'JetBrains Mono', monospace; font-size:13px; padding:12px; outline:none; resize:none; line-height:1.6; tab-size:4;" placeholder="# Blackmagic will type autonomously here without you touching mouse..."></textarea>
+          </div>
+          <div style="background:#1e293b; padding:6px 14px; font-size:11px; color:#64748b; display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.06);">
+            <span id="notepad-char-count">0 characters | Hands-Free Editor</span>
+            <span id="notepad-auto-status" style="color:#a855f7; font-weight:600;">🤖 Untouched Mouse Typing Engine Ready</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIRTUAL ROBOT CURSOR ELEMENT (HOVERING GLIDER) -->
+    <div id="virtual-robot-cursor" class="virtual-robot-cursor" style="display:none;">
+      <svg class="robot-cursor-pointer" viewBox="0 0 24 24" width="26" height="26" fill="none">
+        <path d="M3 3L10.5 21L14 14L21 10.5L3 3Z" fill="#6366f1" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      <div class="robot-cursor-tag" id="robot-cursor-tag">🤖 Hands-Free Cursor</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- MODAL 7: FULL-SCREEN CYBERNETIC ARC REACTOR HUD            -->
+  <!-- (Directly inspired by the laptop interface in the video)    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay-backdrop cyber-hud-backdrop" id="modal-cybernetic-hud" style="display:none;">
+    <div class="cyber-hud-container" id="cyber-hud-container">
+      <!-- HUD HEADER -->
+      <div class="cyber-hud-topbar">
+        <div class="cyber-hud-title-bracket">
+          <span class="bracket-tag">&lt;SYS_CORE&gt;</span>
+          <h2 class="cyber-hud-title" id="cyber-hud-title-text">HEART &bull; BLACKMAGIC NEURAL WORKSTATION</h2>
+          <span class="bracket-tag">&lt;/SYS_CORE&gt;</span>
+        </div>
+        <div class="cyber-hud-actions">
+          <button class="cyber-theme-btn" id="btn-theme-amber" onclick="setCyberHudTheme('amber')">🔥 Amber Core (Video 1)</button>
+          <button class="cyber-theme-btn active" id="btn-theme-violet" onclick="setCyberHudTheme('violet')">🔮 Cyber Violet (Video 2)</button>
+          <button class="btn-modal-close" onclick="closeCyberHudView()">✕ Exit HUD</button>
+        </div>
+      </div>
+
+      <!-- MAIN HUD GRID -->
+      <div class="cyber-hud-grid">
+        <!-- LEFT TELEMETRY PANEL -->
+        <div class="cyber-hud-panel left">
+          <div class="hud-panel-title">SYSTEM TELEMETRY</div>
+          
+          <div class="hud-gauge-group">
+            <div class="hud-gauge-item">
+              <div class="hud-gauge-val" id="hud-val-temp">41.8°C</div>
+              <div class="hud-gauge-label">CORE TEMP</div>
+            </div>
+            <div class="hud-gauge-item">
+              <div class="hud-gauge-val" id="hud-val-cpu">3.84 GHz</div>
+              <div class="hud-gauge-label">CPU CLOCK</div>
+            </div>
+            <div class="hud-gauge-item">
+              <div class="hud-gauge-val" id="hud-val-volts">1.20 V</div>
+              <div class="hud-gauge-label">VOLTAGE</div>
+            </div>
+            <div class="hud-gauge-item">
+              <div class="hud-gauge-val" id="hud-val-sync">99.8%</div>
+              <div class="hud-gauge-label">NEURAL SYNC</div>
+            </div>
+          </div>
+
+          <!-- AUDIO FREQUENCY SPECTRUM EQUALIZER -->
+          <div class="hud-audio-spectrum-box">
+            <div class="hud-spectrum-title">AUDIO WAVEFORM FREQUENCY</div>
+            <div class="hud-spectrum-bars" id="hud-spectrum-bars">
+              <span class="spec-bar" style="height:35%;"></span>
+              <span class="spec-bar" style="height:65%;"></span>
+              <span class="spec-bar" style="height:90%;"></span>
+              <span class="spec-bar" style="height:45%;"></span>
+              <span class="spec-bar" style="height:80%;"></span>
+              <span class="spec-bar" style="height:100%;"></span>
+              <span class="spec-bar" style="height:70%;"></span>
+              <span class="spec-bar" style="height:40%;"></span>
+              <span class="spec-bar" style="height:85%;"></span>
+              <span class="spec-bar" style="height:55%;"></span>
+              <span class="spec-bar" style="height:75%;"></span>
+              <span class="spec-bar" style="height:30%;"></span>
+            </div>
+          </div>
+
+          <div class="hud-log-stream" id="hud-log-stream">
+            <div>[00:12:44] Quantum state verified.</div>
+            <div>[00:12:45] Voice microphone array active.</div>
+            <div>[00:12:46] WhatsApp screen automation ready.</div>
+          </div>
+        </div>
+
+        <!-- CENTER GIANT ARC REACTOR -->
+        <div class="cyber-hud-center">
+          <div class="arc-reactor-wrapper">
+            <!-- OUTER ROTATING DEGREE TICK RING -->
+            <div class="reactor-ring outer-ring"></div>
+            <!-- MIDDLE COUNTER-ROTATING RING -->
+            <div class="reactor-ring mid-ring"></div>
+            <!-- TARGET RETICLE -->
+            <div class="reactor-crosshair"></div>
+            <!-- INNER ENERGY CORE -->
+            <div class="reactor-inner-core">
+              <div class="reactor-pulse-orb"></div>
+              <div class="reactor-core-text" id="reactor-core-text">BLACKMAGIC</div>
+              <div class="reactor-sub-text">ACTIVE</div>
+            </div>
+          </div>
+
+          <div class="cyber-hud-center-controls">
+            <button class="btn-hud-voice" id="btn-hud-voice" onclick="toggleVoiceMode()">
+              <span>🎙️ Toggle Voice Dialogue</span>
+            </button>
+            <button class="btn-hud-screen" onclick="openScreenAutomationModal('whatsapp')">
+              <span>🖥️ Open Screen Automation</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT SUBROUTINES PANEL -->
+        <div class="cyber-hud-panel right">
+          <div class="hud-panel-title">AUTONOMOUS MODULES</div>
+          <div class="hud-subroutine-list">
+            <div class="hud-sub-item">
+              <span class="sub-name">Voice Synthesizer</span>
+              <span class="sub-badge green">ONLINE</span>
+            </div>
+            <div class="hud-sub-item">
+              <span class="sub-name">Screen Automation</span>
+              <span class="sub-badge green">ARMED</span>
+            </div>
+            <div class="hud-sub-item">
+              <span class="sub-name">WhatsApp Bridge</span>
+              <span class="sub-badge green">DISPATCH READY</span>
+            </div>
+            <div class="hud-sub-item">
+              <span class="sub-name">Corporate Mail Engine</span>
+              <span class="sub-badge green">MONITORING</span>
+            </div>
+            <div class="hud-sub-item">
+              <span class="sub-name">YouTube Assistant</span>
+              <span class="sub-badge green">CONNECTED</span>
+            </div>
+            <div class="hud-sub-item">
+              <span class="sub-name">Zero-Trust Firewall</span>
+              <span class="sub-badge blue">ACTIVE</span>
+            </div>
+          </div>
+
+          <div class="hud-panel-title" style="margin-top:16px;">AUTONOMOUS COMMANDS</div>
+          <div class="hud-voice-hints">
+            <div class="voice-hint-item" onclick="insertStudentPrompt('Blackmagic please send message to Sumit on WhatsApp: Hum log library me padh rahe hain'); closeCyberHudView();">
+              "Blackmagic send message to Sumit on WhatsApp..."
+            </div>
+            <div class="voice-hint-item" onclick="insertStudentPrompt('Check company mail and reply with confirmation'); closeCyberHudView();">
+              "Check company mail and reply..."
+            </div>
+            <div class="voice-hint-item" onclick="insertStudentPrompt('Search YouTube for chole recipe step by step'); closeCyberHudView();">
+              "Search YouTube recipe or tutorial..."
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM TAB BAR -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-bar">
+    <button class="mobile-tab-btn active" id="m-tab-chat" onclick="switchMobileTab('chat')">
+      <span class="m-tab-icon">💬</span>
+      <span class="m-tab-label">Chat</span>
+    </button>
+    <button class="mobile-tab-btn" id="m-tab-models" onclick="openOverlay('settings-overlay'); switchSettingsTab('settings-models');">
+      <span class="m-tab-icon">⚡</span>
+      <span class="m-tab-label">Models</span>
+    </button>
+    <button class="mobile-tab-btn" id="m-tab-settings" onclick="openOverlay('settings-overlay')">
+      <span class="m-tab-icon">⚙</span>
+      <span class="m-tab-label">Settings</span>
+    </button>
+    <button class="mobile-tab-btn" id="m-tab-upgrade" onclick="openOverlay('upgrade-overlay')">
+      <span class="m-tab-icon">💳</span>
+      <span class="m-tab-label">Upgrade</span>
+    </button>
+    <a href="/admin" class="mobile-tab-btn" style="text-decoration:none;">
+      <span class="m-tab-icon">🛡️</span>
+      <span class="m-tab-label">Admin</span>
+    </a>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE DRAWER 1: CHAT HISTORY & SAVED SESSIONS               -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="slide-drawer-backdrop" id="chat-history-drawer" onclick="closeChatHistoryDrawerOnBackdrop(event)">
+    <div class="slide-drawer-panel">
+      <div class="slide-drawer-header">
+        <div class="drawer-title-group">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:20px;">💬</span>
+            <h3 style="margin:0;">Chat History</h3>
+          </div>
+          <p>Previous conversations & sessions</p>
+        </div>
+        <button class="drawer-close-btn" onclick="closeChatHistoryDrawer()" title="Close History">✕</button>
+      </div>
+
+      <div class="drawer-actions-bar">
+        <button class="btn-new-session" onclick="startNewChatSession()">
+          <span>➕</span><span>New Conversation</span>
+        </button>
+        <input type="text" id="chat-history-search" class="drawer-search-input" placeholder="Search conversations..." oninput="filterChatHistory()">
+      </div>
+
+      <div class="drawer-items-list" id="chat-history-list">
+        <!-- Dynamically populated session cards -->
+      </div>
+
+      <div style="padding-top:14px; border-top:1px solid var(--border-subtle); margin-top:auto; display:flex; justify-content:space-between; align-items:center;">
+        <button class="session-delete-btn" onclick="clearAllChatSessions()" style="font-size:12px; opacity:0.8;" title="Clear all local conversations">
+          🗑 Clear All History
+        </button>
+        <span style="font-size:11px; color:var(--text-muted);" id="chat-sessions-count">0 sessions</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SLIDE DRAWER 2: PROJECTS WORKSPACE MANAGER                  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="slide-drawer-backdrop" id="projects-drawer" onclick="closeProjectsDrawerOnBackdrop(event)">
+    <div class="slide-drawer-panel">
+      <div class="slide-drawer-header">
+        <div class="drawer-title-group">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:20px;">📁</span>
+            <h3 style="margin:0;">Workspace Projects</h3>
+          </div>
+          <p>Organize chats and contexts by project</p>
+        </div>
+        <button class="drawer-close-btn" onclick="closeProjectsDrawer()" title="Close Projects">✕</button>
+      </div>
+
+      <!-- CURRENT ACTIVE PROJECT -->
+      <div class="active-project-card">
+        <div style="font-size:10px; text-transform:uppercase; letter-spacing:0.5px; color:#94a3b8; font-weight:700;">ACTIVE PROJECT SCOPE</div>
+        <div style="font-size:16px; font-weight:800; color:#38bdf8; margin:4px 0;" id="drawer-active-project-title">Default Project</div>
+        <div style="font-size:12px; color:#cbd5e1;">All messages, memories, and artifacts are isolated to this project.</div>
+      </div>
+
+      <!-- CREATE NEW PROJECT FORM -->
+      <div class="new-project-inline-form">
+        <label style="font-size:12px; font-weight:700; color:#e2e8f0; display:block; margin-bottom:4px;">Create New Project</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="drawer-new-project-input" class="drawer-input" placeholder="e.g. SIH 2026 Innovation Lab">
+          <button class="btn-create-project-mini" onclick="createProjectFromDrawer()">Add</button>
+        </div>
+      </div>
+
+      <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; color:#94a3b8; margin:12px 0 8px 0;">YOUR PROJECTS</div>
+      <div class="drawer-items-list" id="projects-list-container">
+        <!-- Dynamically populated projects list -->
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-popup" id="toast-popup">
+    <span id="toast-icon">⚡</span>
+    <span id="toast-text">System notification</span>
+  </div>
+
+  <!-- LOAD ENGINE SCRIPT -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
